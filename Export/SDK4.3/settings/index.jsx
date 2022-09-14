@@ -7,7 +7,7 @@ return (
         <TextInput
             label="API Key"
             title="OpenWatherMap API Key"
-            settingsKey="textInput"
+            settingsKey="apiKey"
             disabled={!(props.settings.toggleTextInput === "true")}
         />
         <Toggle
