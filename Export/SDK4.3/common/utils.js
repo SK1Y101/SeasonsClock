@@ -48,6 +48,16 @@ export function showElement(ele, val) {
   };
 };
 
+export function updateColour(colour, ele) {
+  try {
+    ele.forEach(function(eles) {
+      eles.style.fill = colour;
+    });
+  } catch(err) {
+    ele.style.fill=colour;
+  };
+}
+
 // Pad a value such that it has a defined length
 export function zeroPad(val, def="00") {
   return (def + val.toString()).slice(-def.length);
