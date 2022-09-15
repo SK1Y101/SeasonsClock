@@ -9,7 +9,7 @@ return (
                     <Select
                         label="Add Stat to show on the watchface"
                         options={[
-                            { name: 'Battery Charge'},
+                            {name: "Battery Charge", value:"batCharge"},
                         ]}
                     />
                 }

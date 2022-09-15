@@ -29,7 +29,6 @@ clock.granularity = "minutes";
 clock.ontick = (evt) => {
     let now = evt.date;
     timeInd.drawTime(now);
-    // statsDisp.onTick(now);
 }
 
 // display.addEventListener("change", () => {
@@ -38,3 +37,37 @@ clock.ontick = (evt) => {
 //     } else {
 //     };
 // });
+
+// Define a function to apply our settings
+let applySettings = function() {
+  if (! settings) {
+    return;
+  };
+  try {
+    // Set element colours
+    settings.isPresent("shownStats", statsDisp.changeStats);
+    // Show that settings have been loaded
+    console.log("Settings applied");
+    // Save the settings that have been applied
+    settings.saveSettings();
+  } catch (err) {
+    console.log("Couldn't apply settings");
+  };
+}
+applySettings();
+
+//Fetch any messages that come through
+peerSocket.addEventListener("message", function(evt) {
+  if (!evt.data.hasOwnProperty("type")) {
+    console.log("Message without a type received: " + evt.data)
+  };
+  if (evt.data.type === "settings") {
+    let newSet = {};
+    newSet[evt.data.key] = evt.data.value;
+
+    console.log("Setting changed: "+evt.data.key+evt.data.value);
+
+    settings.replaceSettings(newSet);
+    applySettings();
+  };
+});
