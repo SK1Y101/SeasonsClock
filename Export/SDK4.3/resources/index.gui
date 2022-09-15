@@ -1,4 +1,8 @@
 <svg>
   <rect id="background"/>
   <text id="digitalClock">00:00</text>
+
+  <!-- Stats area -->
+  <text id="stat1" class="stats"></text>
+  <text id="icon1"></text>
 </svg>

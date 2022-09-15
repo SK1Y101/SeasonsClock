@@ -1,5 +1,6 @@
 import * as util from "../../common/utils";
 
+// export the clock as a callable
 export let timeIndicator = function(doc, settings) {
     const bg = doc.getElementById("background");
     const digitalClock = doc.getElementById("digitalClock");
