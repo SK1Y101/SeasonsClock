@@ -14,12 +14,12 @@ export let batteryIndicator = function() {
         const chrg = battery.chargeLevel;
 
         // show the battery charge percentage
-        this.text.text = util.zeroPad(chrg,"   ")+"%";
+        util.setText(this.text, util.zeroPad(chrg, "   ")+"%");
 
         // determine the colour
         let col = (char ? "#ffaa33" : (chrg <= 16 ? "#ff4444" : (chrg <=30 ? "#ffff44" : "#44ff44")));
-        this.text.style.fill=col;
-        this.icon.style.fill=col;
+        util.updateColour(this.text, col);
+        util.updateColour(this.icon, col);
     };
 
     // start the indicator
@@ -34,7 +34,5 @@ export let batteryIndicator = function() {
     this.stop = function() {
         battery.removeEventListener("change", () => { this.draw(); });
         charger.removeEventListener("change", () => { this.draw(); });
-        this.text.text = "";
-        this.icon.href = "";
     };
 };

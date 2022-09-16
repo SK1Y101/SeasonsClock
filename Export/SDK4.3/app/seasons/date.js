@@ -11,7 +11,7 @@ export let dateIndicator = function() {
         if (this.text) {
             let day = now.getDate();
             let month = now.getMonth() + 1;
-            this.text.text = `${day}/${month}`;
+            util.setText(this.text, `${day}/${month}`);
         };
     };
 
@@ -19,11 +19,11 @@ export let dateIndicator = function() {
     this.start = function() {
         this.ontick(new Date());
         this.icon.href = "icons/icon_time_front.png";
+        util.updateColour(this.text, "gray");
+        util.updateColour(this.icon, "gray");
     };
 
     // stop the indicator
     this.stop = function() {
-        this.text.text = "";
-        this.icon.href = "";
     };
 };

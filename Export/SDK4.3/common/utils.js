@@ -3,6 +3,11 @@ import { readFileSync, unlinkSync, writeFileSync } from "fs"
 
 // Set some default values
 
+// Pad a value such that it has a defined length
+export function zeroPad(val, def="00") {
+  return (def + val.toString()).slice(-def.length);
+};
+
 // Change the z axis height
 export function changeLayer(ele, layer) {
   try {
@@ -48,7 +53,7 @@ export function showElement(ele, val) {
   };
 };
 
-export function updateColour(colour, ele) {
+export function updateColour(ele, colour) {
   try {
     ele.forEach(function(eles) {
       eles.style.fill = colour;
@@ -58,9 +63,17 @@ export function updateColour(colour, ele) {
   };
 }
 
-// Pad a value such that it has a defined length
-export function zeroPad(val, def="00") {
-  return (def + val.toString()).slice(-def.length);
+// set the text of an element
+export function setText(ele, text) {
+  try {
+    ele.forEach(function(eles) {
+      eles.text = text;
+      eles.style.textLength = text.length;
+    });
+  } catch(err) {
+    ele.text = text;
+    ele.style.textLength = text.length;
+  };
 };
 
 // Force a field to be an array

@@ -1,11 +1,13 @@
-import * as util from "../../common/utils";
-import { batteryIndicator } from "./battery";
+import { me as device } from "device";
 import { dateIndicator } from "./date";
+import { batteryIndicator } from "./battery";
 
 export let statsDisaply = function(doc, settings) {
     // fetch elements
     const elem = [];
     const elemNum = 1;
+    let w = device.screen.width;
+    let h = device.screen.height;
     do {
         elem.push({
             "module": null,
@@ -15,10 +17,21 @@ export let statsDisaply = function(doc, settings) {
         });
         ++elemNum;
     } while (doc.getElementById("stat"+elemNum) != null);
+    const statsArea = doc.getElementById("statsArea");
 
     // fetch module references
     let batInd = new batteryIndicator();
     let dateInd = new dateIndicator();
+
+    // move the text and icon to a location given module number
+    let translate = function(i, num, txt, ico) {
+        let x = i < num ? w * (i + 1) / (num + 1) : w*1.5;
+        let txtw = txt.getBBox().width;
+        let icow = ico.width;
+        let tw = txtw + icow;
+        txt.x = x - 0.5*(tw - txtw);
+        ico.x = x + (0.5*tw - icow);
+    };
 
     // fetch the module from the settings codes
     let fetchModule = function(key) {
@@ -33,6 +46,7 @@ export let statsDisaply = function(doc, settings) {
     this.changeStats = function(statsList) {
         // fetch the number of stats to draw
         const num = Object.keys(statsList).length;
+        statsArea.y = h * (num > 0 ? 0.9 : 1);
         for (let i = 0; i <= elem.length; i++) {
             let newmodule = i < num ? statsList[i].value : "" ;
             let oldmodule = elem[i]["modulename"];
@@ -43,6 +57,8 @@ export let statsDisaply = function(doc, settings) {
                 elem[i]["module"].text = null;
                 elem[i]["module"].icon = null;
                 elem[i]["module"] = null;
+                elem[i]["text"].text = "";
+                elem[i]["icon"].href = "";
             };
             if (newmodule && changed) {
                 elem[i]["modulename"] = newmodule;
@@ -51,9 +67,7 @@ export let statsDisaply = function(doc, settings) {
                 elem[i]["module"].icon = elem[i]["icon"];
                 elem[i]["module"].start();
             };
-            let pos = `${100 * (i+1) / (num+2)}%`;
-            elem[i]["text"].x = pos;
-            elem[i]["icon"].x = pos;
+            translate(i, num, elem[i]["text"], elem[i]["icon"]);
         };
     };
 

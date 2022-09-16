@@ -11,17 +11,17 @@ export let timeIndicator = function(doc, settings) {
 
         hours = util.zeroPad(hours);
         mins = util.zeroPad(mins);
-        digitalClock.text = `${hours}:${mins}`;
+        util.setText(digitalClock, `${hours}:${mins}`);
 
         let h = Math.abs(12-now.getHours());
         if (h < 8) {
-            util.updateColour("skyblue", bg);
+            util.updateColour(bg, "skyblue");
         } else if (h > 10) {
-            util.updateColour("black", bg);
+            util.updateColour(bg, "black");
         } else if (h > 9) {
-            til.updateColour("#131862", bg);
+            util.updateColour(bg, "#131862");
         } else {
-            util.updateColour("#546bab", bg);
+            util.updateColour(bg, "#546bab");
         }
     }
 }
