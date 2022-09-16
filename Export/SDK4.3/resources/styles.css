@@ -5,7 +5,7 @@
 }
 
 #digitalClock {
-  font-size: 90;
+  font-size: 100;
   font-family: System-Light;
   text-length: 32;
   text-anchor: middle;
@@ -15,10 +15,18 @@
 }
 
 .stats {
-  font-size: 25;
+  font-size: 30;
   font-family: System-Light;
   text-anchor: middle;
+  text-length: 32;
   x: 50%;
-  y: 100%-10;
+  y: 100%-5;
   fill: grey;
+}
+
+.statsIcon {
+  x: 50%;
+  y: 100%-10%;
+  width: 10%;
+  height: 10%;
 }

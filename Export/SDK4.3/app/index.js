@@ -29,6 +29,7 @@ clock.granularity = "minutes";
 clock.ontick = (evt) => {
     let now = evt.date;
     timeInd.drawTime(now);
+    statsDisp.ontick(now);
 }
 
 // display.addEventListener("change", () => {

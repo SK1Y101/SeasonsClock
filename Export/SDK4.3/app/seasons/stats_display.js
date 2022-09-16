@@ -1,48 +1,67 @@
 import * as util from "../../common/utils";
 import { batteryIndicator } from "./battery";
+import { dateIndicator } from "./date";
 
 export let statsDisaply = function(doc, settings) {
-    // Determine the number of stats displays requested
-    // Determine Which modules are requested
-    // Load those modules
-    // Pass the elements to each module
-    // Change the display to show those modules
-
-    const elems = [];
-
-    const modules = [];
-
-    for (let i=1; i<2; i++) {
-        elems.push({
-            "module": {},
-            "text": doc.getElementById("stat"+i),
-            "icon": doc.getElementById("icon"+i),
+    // fetch elements
+    const elem = [];
+    const elemNum = 1;
+    do {
+        elem.push({
+            "module": null,
+            "modulename": "",
+            "text": doc.getElementById("stat"+elemNum),
+            "icon": doc.getElementById("icon"+elemNum),
         });
-    };
+        ++elemNum;
+    } while (doc.getElementById("stat"+elemNum) != null);
 
+    // fetch module references
+    let batInd = new batteryIndicator();
+    let dateInd = new dateIndicator();
+
+    // fetch the module from the settings codes
     let fetchModule = function(key) {
         switch (key) {
             case "batCharge":
-                return batteryIndicator;
-        }
+                return batInd;
+            case "curDate":
+                return dateInd;
+        };
     };
 
     this.changeStats = function(statsList) {
         // fetch the number of stats to draw
         const num = Object.keys(statsList).length;
-        for (elem in elems) {
-            if (elem["module"]) {
-                // remove the old module
-                elem["module"].destroy();
-                delete elem["module"];
+        for (let i = 0; i <= elem.length; i++) {
+            let newmodule = i < num ? statsList[i].value : "" ;
+            let oldmodule = elem[i]["modulename"];
+            let changed = newmodule!=oldmodule;
+            if (oldmodule && changed) {
+                elem[i]["modulename"] = "";
+                elem[i]["module"].stop();
+                elem[i]["module"].text = null;
+                elem[i]["module"].icon = null;
+                elem[i]["module"] = null;
             };
-            if (i <= num) {
-                // and add the new one
-                newmodule = fetchModule(statsList[i].value);
-                elem["module"] = new statModule(elem["text"], elem["icon"]);
-            } else {
-                elem["text"].text = "";
+            if (newmodule && changed) {
+                elem[i]["modulename"] = newmodule;
+                elem[i]["module"] = fetchModule(newmodule);
+                elem[i]["module"].text = elem[i]["text"];
+                elem[i]["module"].icon = elem[i]["icon"];
+                elem[i]["module"].start();
             };
+            let pos = `${100 * (i+1) / (num+2)}%`;
+            elem[i]["text"].x = pos;
+            elem[i]["icon"].x = pos;
+        };
+    };
+
+    this.ontick = function(now) {
+        for (const ele of elem) {
+            if (ele["modulename"] && ele["module"].ontick) {
+                ele["module"].ontick(now);
+            }
         };
     };
 }

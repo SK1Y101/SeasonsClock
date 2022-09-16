@@ -10,6 +10,7 @@ return (
                         label="Add Stat to show on the watchface"
                         options={[
                             {name: "Battery Charge", value:"batCharge"},
+                            {name: "Current Date", value:"curDate"},
                         ]}
                     />
                 }
