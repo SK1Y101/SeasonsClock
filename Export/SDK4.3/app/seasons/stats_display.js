@@ -21,16 +21,15 @@ export let statsDisaply = function(doc, settings) {
 
     // fetch module references
     let batInd = new batteryIndicator();
-    let dateInd = new dateIndicator();
+    let dateInd = new dateIndicator(dateFormat);
 
     // move the text and icon to a location given module number
     let translate = function(i, num, txt, ico) {
         let x = i < num ? w * (i + 1) / (num + 1) : w*1.5;
         let txtw = txt.getBBox().width;
         let icow = ico.width;
-        let tw = txtw + icow;
-        txt.x = x - 0.5*(tw - txtw);
-        ico.x = x + (0.5*tw - icow);
+        txt.x = x;
+        ico.x = txt.x + txtw*0.5;
     };
 
     // fetch the module from the settings codes

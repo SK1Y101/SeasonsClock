@@ -15,6 +15,37 @@ return (
                     />
                 }
             />
+            <Select
+            label={"Date Format"}
+            settingsKey="dateFormat"
+            options={[
+                {value: 0,  example:"31/12",                name:"   DD-MM"},
+                // {value: 1,  example:"12/31",                name:"   MM-DD"},
+                {value: 2,  example:"31 Dec",               name:"   DD-Mon"},
+                // {value: 3,  example:"Dec 31",               name:"   Mon-DD"},
+                {value: 4,  example:"31 December",          name:"   DD-Month"},
+                // {value: 5,  example:"December 31",          name:"   Month-DD"},
+                // {value: 10,  example:"Sun, 31/12",           name:"dS-DD-MM"},
+                // {value: 11,  example:"Sun, 12/31",           name:"dS-MM-DD"},
+                {value: 12,  example:"Sun, 31 Dec",          name:"dS-DD-Mon"},
+                // {value: 13,  example:"Sun, Dec 31",          name:"dS-Mon-DD"},
+                {value: 14,  example:"Sun, 31 December",     name:"dS-DD-Month"},
+                // {value: 15,  example:"Sun, December 31",     name:"dS-Month-DD"},
+                // {value: 21,  example:"Sunday, 31/12",        name:"dL-DD-MM"},
+                // {value: 22,  example:"Sunday, 12/31",        name:"dL-MM-DD"},
+                {value: 23,  example:"Sunday, 31 Dec",       name:"dL-DD-Mon"},
+                // {value: 24,  example:"Sunday, Dec 31",       name:"dL-Mon-DD"},
+                {value: 25,  example:"Sunday, 31 December",  name:"dL-DD-Month"},
+                // {value: 26,  example:"Sunday, December 31",  name:"dL-Month-DD"},
+            ]}
+            renderItem={
+                (option) =>
+                <TextImageRow
+                    label={option.name}
+                    sublabel={option.example}
+                />
+            }
+            />
         </Section>
         <Section title={<Text bold align="center">Application Settings</Text>}>
             <Text>

@@ -114,3 +114,28 @@ export function removeData(fName,defName) {
     logerror(err,"remove "+fName);
   };
 };
+
+// fetch the date as a nicely formatted string
+export function dateString(now, format=0) {
+  // arrays of things
+  const longMonth = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const shortMonth = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"," Aug", "Sept", "Oct", "Nov", "Dec"];
+  const longDay = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const shortDay = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
+  // fetch used quantities
+  const NDay = zeroPad(now.getDate());
+  const sDay = shortDay(now.getDay());
+  const LDay = longDay(now.getDay());
+  const NMon = zeroPad(now.getMonnth()+1);
+  const SMon = shortMonth(now.getMonnth());
+  const LMon = longMonth(now.getMonnth());
+  // formatting
+
+  return (format >= 10 ? ( format >= 21 ? LDay : sDay ) : "")+
+    [NDay+"/"+NMon,
+     NMon+"/"+NDay,
+     NDay+" "+SMon,
+     SMon+" "+NDay,
+     NDay+" "+LMon,
+     LMon+" "+NDay][lastDateFormat%10];
+};

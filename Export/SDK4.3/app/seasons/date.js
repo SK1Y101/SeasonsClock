@@ -2,16 +2,15 @@
 import * as util from "../../common/utils";
 import clock from "clock";
 
-export let dateIndicator = function() {
+export let dateIndicator = function(dateFormat=0) {
     this.text = null;
     this.icon = null;
 
     // update onscreen elements
     this.ontick = function(now) {
         if (this.text) {
-            let day = now.getDate();
-            let month = now.getMonth() + 1;
-            util.setText(this.text, `${day}/${month}`);
+            const dateText = util.dateString(now, dateFormat);
+            util.setText(this.text, dateText);
         };
     };
 
