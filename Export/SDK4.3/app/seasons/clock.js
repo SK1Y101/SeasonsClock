@@ -8,6 +8,7 @@ export let timeIndicator = function(doc, settings) {
     this.drawTime = function(now) {
         let hours = now.getHours();
         let mins = now.getMinutes();
+        const dayFrac = ((mins/60) + hours)/24;
 
         hours = util.zeroPad(hours);
         mins = util.zeroPad(mins);

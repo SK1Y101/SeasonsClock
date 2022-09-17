@@ -13,6 +13,8 @@ import { statsDisaply } from "./seasons/stats_display";
 // set default values fpr things
 let DefSet = function() {
     var defaults = {
+      // Customisation defaults
+      TimeFormat: ["0"],
     };
     return defaults;
   };
@@ -32,12 +34,8 @@ clock.ontick = (evt) => {
     statsDisp.ontick(now);
 }
 
-// display.addEventListener("change", () => {
-//     if (display.on) {
-//       // start sensors
-//     } else {
-//     };
-// });
+const debugElem = document.getElementById("debugElem");
+util.setText(debugElem, "help");
 
 // Define a function to apply our settings
 let applySettings = function() {
@@ -45,8 +43,10 @@ let applySettings = function() {
     return;
   };
   try {
-    // Set element colours
+    // Set Display modules
     settings.isPresent("shownStats", statsDisp.changeStats);
+    // update Date format
+    // settings.isPresent("TimeFormat", updateDateFormat);
     // Show that settings have been loaded
     console.log("Settings applied");
     // Save the settings that have been applied
@@ -65,6 +65,11 @@ peerSocket.addEventListener("message", function(evt) {
   if (evt.data.type === "settings") {
     let newSet = {};
     newSet[evt.data.key] = evt.data.value;
+    try {
+      util.setText(debugElem, evt.data.value.selected);
+    } catch (error) {
+      util.setText(debugElem, "K:"+evt.data.key);
+    };
 
     console.log("Setting changed: "+evt.data.key+evt.data.value);
 

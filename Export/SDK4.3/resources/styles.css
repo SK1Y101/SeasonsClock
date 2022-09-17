@@ -17,7 +17,7 @@
 .stats {
   font-size: 30;
   font-family: System-Light;
-  text-anchor: middle;
+  text-anchor: end;
   text-length: 32;
   x: 50%;
   y: 100%-5;

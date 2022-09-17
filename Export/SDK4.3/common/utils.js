@@ -131,11 +131,6 @@ export function dateString(now, format=0) {
   const LMon = longMonth(now.getMonnth());
   // formatting
 
-  return (format >= 10 ? ( format >= 21 ? LDay : sDay ) : "")+
-    [NDay+"/"+NMon,
-     NMon+"/"+NDay,
-     NDay+" "+SMon,
-     SMon+" "+NDay,
-     NDay+" "+LMon,
-     LMon+" "+NDay][lastDateFormat%10];
+  return (format >= 10 ? ( format >= 20 ? LDay : sDay ) : "")+
+    [NDay+"/"+NMon, NMon+"/"+NDay, NDay+" "+SMon, SMon+" "+NDay, NDay+" "+LMon, LMon+" "+NDay][format%10];
 };
