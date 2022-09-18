@@ -9,5 +9,4 @@
 
   <text id="stat2" class="stats"></text>
   <image id="icon2" class="statsIcon" href=""/>
-  <text id="debugElem" class="stats" y="10%" text-anchor="middle" font-size="20">--</text>
 </svg>

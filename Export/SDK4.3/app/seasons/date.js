@@ -1,16 +1,15 @@
 // Import my modules
 import * as util from "../../common/utils";
 
-export let dateIndicator = function() {
+export let dateIndicator = function(settings) {
     this.text = null;
     this.icon = null;
-    // this.format = 0;
 
     // update onscreen elements
     this.ontick = function(now) {
         if (this.text) {
-            // const dateText = util.dateString(now, 0);
-            const dateText = now.getMinutes();
+            const format = settings.getOrElse("dateFormat", "dayNum/monthNum");
+            const dateText = util.dateString(now, format);
             util.setText(this.text, dateText);
         };
     };

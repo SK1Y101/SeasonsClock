@@ -67,12 +67,12 @@ export function updateColour(ele, colour) {
 export function setText(ele, text) {
   try {
     ele.forEach(function(eles) {
-      eles.text = text;
       eles.style.textLength = text.length;
+      eles.text = text;
     });
   } catch(err) {
-    ele.text = text;
     ele.style.textLength = text.length;
+    ele.text = text;
   };
 };
 
@@ -116,7 +116,8 @@ export function removeData(fName,defName) {
 };
 
 // fetch the date as a nicely formatted string
-export function dateString(now, format=0) {
+export function dateString(now, format) {
+  let datestring = format;
   // arrays of things
   const longMonth = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const shortMonth = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"," Aug", "Sept", "Oct", "Nov", "Dec"];
@@ -124,13 +125,11 @@ export function dateString(now, format=0) {
   const shortDay = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
   // fetch used quantities
   const NDay = zeroPad(now.getDate());
-  const sDay = shortDay(now.getDay());
-  const LDay = longDay(now.getDay());
-  const NMon = zeroPad(now.getMonnth()+1);
-  const SMon = shortMonth(now.getMonnth());
-  const LMon = longMonth(now.getMonnth());
+  const SDay = shortDay[now.getDay()];
+  const LDay = longDay[now.getDay()];
+  const NMon = zeroPad(now.getMonth()+1);
+  const SMon = shortMonth[now.getMonth()];
+  const LMon = longMonth[now.getMonth()];
   // formatting
-
-  return (format >= 10 ? ( format >= 20 ? LDay : sDay ) : "")+
-    [NDay+"/"+NMon, NMon+"/"+NDay, NDay+" "+SMon, SMon+" "+NDay, NDay+" "+LMon, LMon+" "+NDay][format%10];
+  return datestring.replace("dayNum", NDay).replace("dayShort", SDay).replace("dayLong", LDay).replace("monthNum", NMon).replace("monthShort", SMon).replace("monthLong", LMon);
 };

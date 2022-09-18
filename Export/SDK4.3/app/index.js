@@ -14,7 +14,7 @@ import { statsDisaply } from "./seasons/stats_display";
 let DefSet = function() {
     var defaults = {
       // Customisation defaults
-      TimeFormat: {"selected":0},
+      TimeFormat: [0],
     };
     return defaults;
   };
@@ -34,11 +34,6 @@ clock.ontick = (evt) => {
     statsDisp.ontick(now);
 }
 
-const debugElem = document.getElementById("debugElem");
-let changeDateFormat = function(val) {
-  util.setText(debugElem, settings.getOrElse("TimeFormat", "nothing found"));
-};
-
 // Define a function to apply our settings
 let applySettings = function() {
   if (! settings) {
@@ -47,14 +42,6 @@ let applySettings = function() {
   try {
     // Set Display modules
     settings.isPresent("shownStats", statsDisp.changeStats);
-    // update Date format
-    // settings.isPresent("TimeFormat", changeDateFormat);
-    // Show that settings have been loaded
-    console.log("Settings applied");
-
-    util.setText(debugElem, "TimeFormat: " + settings.getRaw("TimeFormat"));
-    // Save the settings that have been applied
-    settings.saveSettings();
   } catch (err) {
     console.log("Couldn't apply settings");
   };
@@ -73,6 +60,8 @@ peerSocket.addEventListener("message", function(evt) {
     console.log("Setting changed: "+evt.data.key+evt.data.value);
 
     settings.replaceSettings(newSet);
+
+    settings.saveSettings();
 
     applySettings();
   };

@@ -18,12 +18,16 @@ return (
         </Section>
         <Section title={<Text bold align="center">Application Settings</Text>}>
             <Select
-                label={"Time Markings"}
-                settingsKey="TimeFormat"
+                settingsKey="dateFormat"
+                label="Date foramt"
                 options={[
-                    {name:"None",               value:"0"},
-                    {name:"Hours only",         value:"1"},
-                    {name:"Hours and Minutes",  value:"2"}
+                    {name: "31/12",               value:"dayNum/monthNum"},
+                    {name: "31 Dec",              value:"dayNum monthShort"},
+                    {name: "31 December",         value:"dayNum monthLong"},
+                    {name: "Sun, 31 Dec",         value:"dayShort, dayNum monthShort"},
+                    {name: "Sunday, 31 Dec",      value:"dayLong, dayNum monthShort"},
+                    {name: "Sun, 31 December",    value:"dayShort, dayNum monthLong"},
+                    {name: "Sunday, 31 December", value:"dayLong, dayNum monthLong"},
                 ]}
             />
         </Section>

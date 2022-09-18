@@ -1,5 +1,9 @@
+// Import fitbit modules
 import { me as device } from "device";
+
+// Import my modules
 import { dateIndicator } from "./date";
+import * as util from "../../common/utils";
 import { batteryIndicator } from "./battery";
 
 export let statsDisaply = function(doc, settings) {
@@ -21,15 +25,13 @@ export let statsDisaply = function(doc, settings) {
 
     // fetch module references
     let batInd = new batteryIndicator();
-    let dateInd = new dateIndicator();
+    let dateInd = new dateIndicator(settings);
 
     // move the text and icon to a location given module number
     let translate = function(i, num, txt, ico) {
         let x = i < num ? w * (i + 1) / (num + 1) : w*1.5;
-        // let txtw = txt.getBBox().width;
-        // let icow = ico.width;
         txt.x = x;
-        ico.x = x;
+        ico.x = txt.x;
     };
 
     // fetch the module from the settings codes
@@ -71,10 +73,10 @@ export let statsDisaply = function(doc, settings) {
     };
 
     this.ontick = function(now) {
-        for (const ele of elem) {
+        for (let ele of elem) {
             if (ele["modulename"] && ele["module"].ontick) {
                 ele["module"].ontick(now);
-            }
+            };
         };
     };
 }
