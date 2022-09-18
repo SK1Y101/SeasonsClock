@@ -18,13 +18,13 @@ return (
         </Section>
         <Section title={<Text bold align="center">Application Settings</Text>}>
             <Select
-            label={"Time Markings"}
-            settingsKey="TimeFormat"
-            options={[
-                {name:"None",               value:"0"},
-                {name:"Hours only",         value:"1"},
-                {name:"Hours and Minutes",  value:"2"}
-            ]}
+                label={"Time Markings"}
+                settingsKey="TimeFormat"
+                options={[
+                    {name:"None",               value:"0"},
+                    {name:"Hours only",         value:"1"},
+                    {name:"Hours and Minutes",  value:"2"}
+                ]}
             />
         </Section>
         <Section title={<Text bold align="center">Application Settings</Text>}>
