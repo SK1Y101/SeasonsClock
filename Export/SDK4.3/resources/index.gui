@@ -1,3 +1,12 @@
-<svg class="background">
-  <text id="digitalClock">00:00</text>
+<svg>
+  <rect id="background"/>
+  <text id="digitalClock">--:--</text>
+
+  <!-- Stats area -->
+  <rect id="statsArea" x="0" y="100%" width="100%" height="100%" fill="#000000"/>
+  <text id="stat1" class="stats"></text>
+  <image id="icon1" class="statsIcon" href=""/>
+
+  <text id="stat2" class="stats"></text>
+  <image id="icon2" class="statsIcon" href=""/>
 </svg>

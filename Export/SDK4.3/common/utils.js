@@ -3,6 +3,11 @@ import { readFileSync, unlinkSync, writeFileSync } from "fs"
 
 // Set some default values
 
+// Pad a value such that it has a defined length
+export function zeroPad(val, def="00") {
+  return (def + val.toString()).slice(-def.length);
+};
+
 // Change the z axis height
 export function changeLayer(ele, layer) {
   try {
@@ -48,9 +53,27 @@ export function showElement(ele, val) {
   };
 };
 
-// Pad a value such that it has a defined length
-export function zeroPad(val, def="00") {
-  return (def + val.toString()).slice(-def.length);
+export function updateColour(ele, colour) {
+  try {
+    ele.forEach(function(eles) {
+      eles.style.fill = colour;
+    });
+  } catch(err) {
+    ele.style.fill=colour;
+  };
+}
+
+// set the text of an element
+export function setText(ele, text) {
+  try {
+    ele.forEach(function(eles) {
+      eles.style.textLength = text.length;
+      eles.text = text;
+    });
+  } catch(err) {
+    ele.style.textLength = text.length;
+    ele.text = text;
+  };
 };
 
 // Force a field to be an array
@@ -90,4 +113,23 @@ export function removeData(fName,defName) {
   } catch(err) {
     logerror(err,"remove "+fName);
   };
+};
+
+// fetch the date as a nicely formatted string
+export function dateString(now, format) {
+  let datestring = format;
+  // arrays of things
+  const longMonth = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const shortMonth = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"," Aug", "Sept", "Oct", "Nov", "Dec"];
+  const longDay = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const shortDay = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
+  // fetch used quantities
+  const NDay = zeroPad(now.getDate());
+  const SDay = shortDay[now.getDay()];
+  const LDay = longDay[now.getDay()];
+  const NMon = zeroPad(now.getMonth()+1);
+  const SMon = shortMonth[now.getMonth()];
+  const LMon = longMonth[now.getMonth()];
+  // formatting
+  return datestring.replace("dayNum", NDay).replace("dayShort", SDay).replace("dayLong", LDay).replace("monthNum", NMon).replace("monthShort", SMon).replace("monthLong", LMon);
 };
