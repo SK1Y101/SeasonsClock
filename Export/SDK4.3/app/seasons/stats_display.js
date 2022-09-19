@@ -30,7 +30,9 @@ export let statsDisaply = function(doc, settings) {
     // move the text and icon to a location given module number
     let translate = function(i, num, txt, ico) {
         let x = i < num ? w * (i + 1) / (num + 1) : w*1.5;
-        txt.x = x;
+        let txtw = txt.text.length * (w / 22);
+        let icow = ico.width;
+        txt.x = x - 0.5 * (icow - txtw);
         ico.x = txt.x;
     };
 
