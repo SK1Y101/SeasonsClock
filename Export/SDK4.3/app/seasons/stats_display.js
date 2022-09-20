@@ -125,10 +125,15 @@ export let statsDisaply = function(doc, settings) {
     };
 
     this.ontick = function(now) {
+        let change = false;
         for (let ele of elem) {
             if (ele["modulename"] && ele["module"].ontick) {
-                ele["module"].ontick(now);
+                if (ele["module"].ontick(now)) {
+                    change = true;
+                };
             };
         };
+        // if an element has updated
+        if (change) { positionModules(); };
     };
 }

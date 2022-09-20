@@ -4,6 +4,7 @@ import * as util from "../../common/utils";
 export let dateIndicator = function(settings) {
     this.text = null;
     this.icon = null;
+    this.format = null;
 
     // update onscreen elements
     this.ontick = function(now) {
@@ -11,6 +12,8 @@ export let dateIndicator = function(settings) {
             const format = settings.getOrElse("dateFormat", "dayNum/monthNum");
             const dateText = util.dateString(now, format);
             util.setText(this.text, dateText);
+            if (this.format === null) { this.format = format; };
+            if (format != this.format) {this.format = format; return true; };
         };
     };
 
