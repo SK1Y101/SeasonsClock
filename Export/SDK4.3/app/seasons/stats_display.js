@@ -40,10 +40,12 @@ export let statsDisaply = function(doc, settings) {
 
     // Determine the entire width of a module element
     let moduleWidth = function(txt, ico) { return txt.text.length * (w / 22) + ico.width; };
+    // compute the sum of an array
+    function sumArray(arr) { let sum=0; for (let e of arr) { sum+=e; }; return sum; };
 
     // Determine the position of a module element
     let positionModules = function() {
-        bins = [[], [], []];
+        bins = [[], []];
         // for each element
         for (let ele of elem) {
             // skip if nothing
@@ -54,33 +56,33 @@ export let statsDisaply = function(doc, settings) {
             let placed = false;
             // itterate through all the bins
             for (let j=0; j<bins[0].length-1; j++) {
+                let thisWid = sumArray(bins[0][i]);
                 // if it fits herer
-                if (bins[0][j] >= wid) {
-                    bins[0][j] -= wid;
+                if (thisWid + wid <= 3) {
                     bins[1][j].push(ele);
-                    bins[2][j].push(wid);
+                    bins[0][j].push(wid);
                     placed = true;
                     break;
                 };
             };
             // if it didn't fit
             if (!placed) {
-                bins[0].push(3-wid);
+                bins[0].push([wid]);
                 bins[1].push([ele]);
             };
         };
-        // compute the sum of an array
-        function sumArray(arr) { let sum=0; for (let e of arr) { sum+=e; }; return sum; };
         // place each module at it's location
         let rows = bins[0].length;
         statsArea.y = h * 0.1 * (10-rows);
         for (let i=0; i<rows-1; i++) {
             // the width of this bin
-            let thisWid = sumArray(bins[2][i]);
+            let thisWid = sumArray(bins[0][i]);
             let thisEle = bins[1][i]
+            let thisPos = 0
             // for each element in the bin
             for (let j=0; j<bins[1][i].length-1; j++) {
-                translate(j, thisWid, thisEle[j]["text"], thisEle[j]["icon"], h * 0.1 * (9-i));
+                translate(thisPos, thisWid, thisEle[j]["text"], thisEle[j]["icon"], h * 0.1 * (9-i));
+                thisPos += bins[0][i][j];
             };
         };
     };
