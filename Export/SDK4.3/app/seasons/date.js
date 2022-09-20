@@ -4,16 +4,22 @@ import * as util from "../../common/utils";
 export let dateIndicator = function(settings) {
     this.text = null;
     this.icon = null;
-    this.format = null;
+
+    function dateText(now) {
+        const format = settings.getOrElse("dateFormat", "dayNum/monthNum");
+        return util.dateString(now, format);
+    };
+
+    this.getWidth = function() {
+        const datetext = dateText(new Date());
+        return Math.min(3, Math.ceil(util.textWidth(datetext) / 100));
+    };
 
     // update onscreen elements
     this.ontick = function(now) {
         if (this.text) {
-            const format = settings.getOrElse("dateFormat", "dayNum/monthNum");
-            const dateText = util.dateString(now, format);
-            util.setText(this.text, dateText);
-            if (this.format === null) { this.format = format; };
-            if (format != this.format) {this.format = format; return true; };
+            const datetext = dateText(now);
+            util.setText(this.text, datetext);
         };
     };
 
