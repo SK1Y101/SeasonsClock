@@ -42,8 +42,6 @@ let applySettings = function() {
   try {
     // Set Display modules
     settings.isPresent("shownStats", statsDisp.changeStats);
-    // And ensure the module positioning is correct
-    statsDisp.positionModules();
   } catch (err) {
     console.log("Couldn't apply settings");
   };

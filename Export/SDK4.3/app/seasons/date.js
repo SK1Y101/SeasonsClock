@@ -11,8 +11,8 @@ export let dateIndicator = function(settings) {
     };
 
     this.getWidth = function() {
-        const datetext = dateText(new Date());
-        return Math.min(3, Math.ceil(util.textWidth(datetext) / 100));
+        this.ontick(new Date());
+        return util.getWidth([this.text, this.icon]);
     };
 
     // update onscreen elements

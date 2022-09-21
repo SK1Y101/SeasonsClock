@@ -1,20 +1,21 @@
 //Fetch the inbuilt modules
 import { readFileSync, unlinkSync, writeFileSync } from "fs"
 
-// Determine the width of a text element
-export function textWidth(txt) {
-  return txt.text.length * (w/22) * (30 / txt.style.fontSize);
-};
-// Resize a text element to fit within a certain width of the screen
-export function textResize(txt, width=1) {
-  let tw = textWidth(txt);
-  let dw = Math.min(1, width / tw);
-  txt.style.fontSize = 30 * dw;
-};
-
 // Pad a value such that it has a defined length
 export function zeroPad(val, def="00") {
   return (def + val.toString()).slice(-def.length);
+};
+
+// Get the widths of any number of elements
+export function getWidth(arg=[]) {
+  let wid = 0;
+  for (arg of arguments) { wid += arg.getBBox().width; };
+  return Math.min(3, Math.ceil(wid / 100));
+};
+
+// compute the sum of an array
+export function sumArray(arr=[0]) {
+  let sum=0; for (let e of arr) { sum+=e; }; return sum;
 };
 
 // Change the z axis height
