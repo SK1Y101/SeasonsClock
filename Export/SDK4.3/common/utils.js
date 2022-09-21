@@ -13,11 +13,6 @@ export function getWidth(arg=[]) {
   return Math.min(3, Math.ceil(wid / 100));
 };
 
-// compute the sum of an array
-export function sumArray(arr=[0]) {
-  let sum=0; for (let e of arr) { sum+=e; }; return sum;
-};
-
 // Change the z axis height
 export function changeLayer(ele, layer) {
   try {
