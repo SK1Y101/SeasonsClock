@@ -5,12 +5,21 @@ export let dateIndicator = function(settings) {
     this.text = null;
     this.icon = null;
 
+    function dateText(now) {
+        const format = settings.getOrElse("dateFormat", "dayNum/monthNum");
+        return util.dateString(now, format);
+    };
+
+    this.getWidth = function() {
+        this.ontick(new Date());
+        return util.getWidth([this.text]);
+    };
+
     // update onscreen elements
     this.ontick = function(now) {
         if (this.text) {
-            const format = settings.getOrElse("dateFormat", "dayNum/monthNum");
-            const dateText = util.dateString(now, format);
-            util.setText(this.text, dateText);
+            const datetext = dateText(now);
+            util.setText(this.text, datetext);
         };
     };
 

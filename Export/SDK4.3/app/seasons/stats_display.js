@@ -5,13 +5,12 @@ import { me as device } from "device";
 import { dateIndicator } from "./date";
 import * as util from "../../common/utils";
 import { batteryIndicator } from "./battery";
+import { modulePlacer } from "./module_placer";
 
 export let statsDisaply = function(doc, settings) {
     // fetch elements
-    const elem = [];
+    let elem = [];
     const elemNum = 1;
-    let w = device.screen.width;
-    let h = device.screen.height;
     do {
         elem.push({
             "module": null,
@@ -21,20 +20,13 @@ export let statsDisaply = function(doc, settings) {
         });
         ++elemNum;
     } while (doc.getElementById("stat"+elemNum) != null);
-    const statsArea = doc.getElementById("statsArea");
+
+    // create the module placer object
+    let moduleplacer = new modulePlacer(doc);
 
     // fetch module references
     let batInd = new batteryIndicator();
     let dateInd = new dateIndicator(settings);
-
-    // move the text and icon to a location given module number
-    let translate = function(i, num, txt, ico) {
-        let x = i < num ? w * (i + 1) / (num + 1) : w*1.5;
-        let txtw = txt.text.length * (w / 22);
-        let icow = ico.width;
-        txt.x = x - 0.5 * (icow - txtw);
-        ico.x = txt.x;
-    };
 
     // fetch the module from the settings codes
     let fetchModule = function(key) {
@@ -49,35 +41,36 @@ export let statsDisaply = function(doc, settings) {
     this.changeStats = function(statsList) {
         // fetch the number of stats to draw
         const num = Object.keys(statsList).length;
-        statsArea.y = h * (num > 0 ? 0.9 : 1);
-        for (let i = 0; i <= elem.length; i++) {
+        moduleplacer.reset();
+        for (let ele of elem) {
+            let i = elem.indexOf(ele);
             let newmodule = i < num ? statsList[i].value : "" ;
-            let oldmodule = elem[i]["modulename"];
-            let changed = newmodule!=oldmodule;
-            if (oldmodule && changed) {
-                elem[i]["modulename"] = "";
-                elem[i]["module"].stop();
-                elem[i]["module"].text = null;
-                elem[i]["module"].icon = null;
-                elem[i]["module"] = null;
-                elem[i]["text"].text = "";
-                elem[i]["icon"].href = "";
+            if (ele["modulename"]) {
+                ele["module"].stop();
+                ele["module"].text = null;
+                ele["module"].icon = null;
+                ele["modulename"] = "";
+                ele["module"] = null;
+                ele["text"].text = "";
+                ele["icon"].href = "";
             };
-            if (newmodule && changed) {
-                elem[i]["modulename"] = newmodule;
-                elem[i]["module"] = fetchModule(newmodule);
-                elem[i]["module"].text = elem[i]["text"];
-                elem[i]["module"].icon = elem[i]["icon"];
-                elem[i]["module"].start();
+            if (newmodule) {
+                ele["modulename"] = newmodule;
+                ele["module"] = fetchModule(newmodule);
+                ele["module"].text = ele["text"];
+                ele["module"].icon = ele["icon"];
+                ele["module"].start();
+                moduleplacer.addModule(ele);
             };
-            translate(i, num, elem[i]["text"], elem[i]["icon"]);
+            // moduleplacer.translate(i, num, elem[i]["text"], elem[i]["icon"]);
         };
+        moduleplacer.placeModules();
     };
 
     this.ontick = function(now) {
         for (let ele of elem) {
             if (ele["modulename"] && ele["module"].ontick) {
-                ele["module"].ontick(now);
+                ele["module"].ontick(now)
             };
         };
     };
