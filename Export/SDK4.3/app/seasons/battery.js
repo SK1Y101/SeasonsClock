@@ -7,6 +7,8 @@ export let batteryIndicator = function() {
     this.text = null;
     this.icon = null;
 
+    this.getWidth = function() { return 1; };
+
     // update onscreen elements
     this.draw = function() {
         // fetch the required values
