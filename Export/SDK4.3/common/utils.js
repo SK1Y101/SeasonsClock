@@ -7,9 +7,9 @@ export function zeroPad(val, def="00") {
 };
 
 // Get the widths of any number of elements
-export function getWidth(arg=[]) {
+export function getWidth(args=[]) {
   let wid = 0;
-  for (arg of arguments) { wid += arg.getBBox().width; };
+  for (let arg of args) { wid += arg.getBBox().width; };
   return Math.min(3, Math.ceil(wid / 100));
 };
 
