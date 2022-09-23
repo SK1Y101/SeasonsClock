@@ -15,6 +15,9 @@ function J2000(now) {
 function J2Date(JDate) {
     return new Date((JDate - 2440587.5)*86400000);
 };
+export function dayFrac(date) {
+    return (date - new Date(date.valueOf()).setUTCHours(0,0,0,0))/86400000;
+};
 
 // Determine whether the user is currently experiencing DST
 function DST(now) {
@@ -24,7 +27,7 @@ function DST(now) {
 };
 
 // approximate the time of sunrise, noon, and sunset, given current gps coordinates.
-function sunPos(now, lat, lon) {
+export function sunPos(now, lat=0, lon=0) {
     // https://en.wikipedia.org/wiki/Sunrise_equation
     // Compute the declination of the sun, and the solar noon time.
     const n = J2000(now);
@@ -33,6 +36,7 @@ function sunPos(now, lat, lon) {
     const C = 1.9148*sin(M) + 0.02*sin(2*M) + 0.0003*sin(3*M);
     const λ = (M+C+180+102.9371) % 360;
     const Jt = 2451545 + J + 0.0053*sin(M) - 0.0069*sin(2*λ);// + now.getTimezoneOffset();
+    const Jth = 24 * dayFrac(J2Date(Jt));
     const dec = asin(sin(λ) * sin(23.44));
     // Reused values
     const sinLatDec = sin(lat) * sin(dec);
@@ -42,6 +46,9 @@ function sunPos(now, lat, lon) {
     const nauticalW = acos((sin(-12) - sinLatDec) / cosLatDec);
     const civilW = acos((sin(-6) - sinLatDec) / cosLatDec);
     const sunriseW = acos((sin(-0.83) - sinLatDec) / cosLatDec);
+    // compute the altitude of the sun at midday/midnight.
+    const a_noon = asin(sinLatDec + cosLatDec*cos(15*(Jth-12)));
+    const a_midnight = asin(sinLatDec + cosLatDec*cos(15*Jth));
     // compute the times for each event and return
     return {
         "noon":         J2Date(Jt),
@@ -53,5 +60,7 @@ function sunPos(now, lat, lon) {
         "nauticalset":  J2Date(Jt + nauticalW/360),
         "astrorise":    J2Date(Jt - astroW/360),
         "astroset":     J2Date(Jt + astroW/360),
+        "midday_alt":   a_noon,
+        "midnight_alt": a_midnight,
     };
 };

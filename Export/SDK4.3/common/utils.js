@@ -121,8 +121,8 @@ export function dateString(now, format) {
   // arrays of things
   const longMonth = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const shortMonth = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"," Aug", "Sept", "Oct", "Nov", "Dec"];
-  const longDay = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-  const shortDay = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
+  const longDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const shortDay = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
   // fetch used quantities
   const NDay = zeroPad(now.getDate());
   const SDay = shortDay[now.getDay()];
