@@ -17,10 +17,10 @@ export let modulePlacer = function(doc) {
 
     // move the text and icon to a location given module number
     this.translate = function(i, wid, txt, ico, y=0.9*h) {
-        let x = i < wid ? w * (2*i + 1) / Math.max(2, 2*wid) : w * 1.5 ;
+        let x = i >= wid ? 1.5 * w : [[1/2], [5/18, 13/18], [3/16, 1/2, 13/16]][wid-1][i];
         // 1 width: [1/2],
-        // 2 width: [1/4, 3/4];
-        // 3 width: [1/6, 3/6, 5/6];
+        // 2 width: [5/18, 13/18];
+        // 3 width: [3/16, 1/2, 13/16];
         txt.x = x - 0.5*(ico.getBBox().width - txt.getBBox().width);
         ico.x = txt.x;
         // ensure the icon and text are actually at the same y level

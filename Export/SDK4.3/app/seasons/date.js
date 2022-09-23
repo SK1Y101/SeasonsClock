@@ -12,7 +12,7 @@ export let dateIndicator = function(settings) {
 
     this.getWidth = function() {
         this.ontick(new Date());
-        return util.getWidth([this.text]);
+        return util.getWidth([this.text, this.icon]);
     };
 
     // update onscreen elements

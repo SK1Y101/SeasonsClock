@@ -10,7 +10,7 @@ export function zeroPad(val, def="00") {
 export function getWidth(args=[]) {
   let wid = 0;
   for (let arg of args) { wid += arg.getBBox().width; };
-  return Math.min(3, Math.ceil(wid / 100));
+  return Math.min(3, Math.ceil(wid / 100 - 0.1));
 };
 
 // Change the z axis height
