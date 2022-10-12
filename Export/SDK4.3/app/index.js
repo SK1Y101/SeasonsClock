@@ -1,6 +1,7 @@
 // Inbuilts
 import clock from "clock";
 import document from "document";
+import { display } from "display";
 import { peerSocket } from "messaging";
 import { preferences } from "user-settings";
 
@@ -9,6 +10,7 @@ import * as util from "../common/utils";
 import { Settings } from "../common/settings";
 import { timeIndicator } from "./seasons/clock";
 import { statsDisaply } from "./seasons/stats_display";
+import { Background } from "./seasons/background";
 
 // set default values fpr things
 let DefSet = function() {
@@ -21,18 +23,30 @@ let DefSet = function() {
 
 // fetch a reference to the modules
 let settings = new Settings("settings.cbor", DefSet);
+let background = new Background(document);
 let timeInd = new timeIndicator(document, settings);
 let statsDisp = new statsDisaply(document, settings);
 
 // Define the clock granularity.
 clock.granularity = "minutes";
 
-// Update on a clock tick
-clock.ontick = (evt) => {
-    let now = evt.date;
+let tickUpdate = function(evt) {
+  let now = evt.date;
+  // but only if the display is on
+  if (display.on) {
     timeInd.drawTime(now);
     statsDisp.ontick(now);
-}
+    background.ontick(now);
+  };
+};
+
+// Update on a clock tick
+clock.ontick = (evt) => {
+  tickUpdate(evt);
+};
+display.onchange = (evt) => {
+  tickUpdate(new Date());
+};
 
 // Define a function to apply our settings
 let applySettings = function() {

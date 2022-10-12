@@ -17,7 +17,7 @@ export let modulePlacer = function(doc) {
 
     // move the text and icon to a location given module number
     this.translate = function(i, wid, txt, ico, y=0.9*h) {
-        let x = i >= wid ? 1.5 * w : [[1/2], [5/18, 13/18], [3/16, 1/2, 13/16]][wid-1][i];
+        let x = i < wid ? w * (2*i + 1) / Math.max(2, 2*wid) : w * 1.5 ;
         // 1 width: [1/2],
         // 2 width: [5/18, 13/18];
         // 3 width: [3/16, 1/2, 13/16];

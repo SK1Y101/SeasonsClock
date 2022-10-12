@@ -19,14 +19,17 @@ return (
         <Section title={<Text bold align="center">Application Settings</Text>}>
             <Select
                 settingsKey="dateFormat"
-                label="Date foramt"
+                label="Date format"
                 options={[
+                    {name: "2020-12-31",          value:"year-monthNum-dayNum"},
                     {name: "31/12",               value:"dayNum/monthNum"},
                     {name: "31 Dec",              value:"dayNum monthShort"},
                     {name: "31 December",         value:"dayNum monthLong"},
+                    {name: "Sun, 31/12",          value:"dayShort, dayNum/monthNum"},
                     {name: "Sun, 31 Dec",         value:"dayShort, dayNum monthShort"},
-                    {name: "Sunday, 31 Dec",      value:"dayLong, dayNum monthShort"},
                     {name: "Sun, 31 December",    value:"dayShort, dayNum monthLong"},
+                    {name: "Sunday, 31/12",       value:"dayLong, dayNum/monthNum"},
+                    {name: "Sunday, 31 Dec",      value:"dayLong, dayNum monthShort"},
                     {name: "Sunday, 31 December", value:"dayLong, dayNum monthLong"},
                 ]}
             />

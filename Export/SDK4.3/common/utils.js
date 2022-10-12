@@ -10,7 +10,7 @@ export function zeroPad(val, def="00") {
 export function getWidth(args=[]) {
   let wid = 0;
   for (let arg of args) { wid += arg.getBBox().width; };
-  return Math.min(3, Math.ceil(wid / 100 - 0.1));
+  return Math.min(3, Math.ceil(wid / 100));
 };
 
 // Change the z axis height
@@ -135,6 +135,7 @@ export function dateString(now, format) {
   const NMon = zeroPad(now.getMonth()+1);
   const SMon = shortMonth[now.getMonth()];
   const LMon = longMonth[now.getMonth()];
+  const year = now.getFullYear();
   // formatting
-  return datestring.replace("dayNum", NDay).replace("dayShort", SDay).replace("dayLong", LDay).replace("monthNum", NMon).replace("monthShort", SMon).replace("monthLong", LMon);
+  return datestring.replace("year", year).replace("dayNum", NDay).replace("dayShort", SDay).replace("dayLong", LDay).replace("monthNum", NMon).replace("monthShort", SMon).replace("monthLong", LMon);
 };

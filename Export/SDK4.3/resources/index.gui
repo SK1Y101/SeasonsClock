@@ -1,5 +1,32 @@
 <svg>
+  <defs>
+    <symbol id="glowing">
+      <gradientRect id="glow" x="-10%" y="-10%" width="20%" height="20%"
+        gradient-type="radial"
+        gradient-x1="50%" gradient-y1="50%"
+        gradient-x2="100%" gradient-y2="100%"
+        gradient-color1="white"
+        gradient-color2="white"
+        gradient-opacity2="0" />
+      <circle id="icon" r="5%" fill="inherit" opacity="0.8"/>
+    </symbol>
+  </defs>
+  <!-- Background -->
   <rect id="background"/>
+  <!-- Sun object -->
+  <use id="sun" href="#glowing" x="50%" y="50%">
+    <set href="glow" attributeName="id" to="sunglow" />
+  </use>
+  <!-- Moon object -->
+  <use id="moon" href="#glowing" x="50%" y="50%">
+    <set href="glow" attributeName="id" to="moonglow" />
+    <set href="icon" attributeName="r" to="14.5" />
+  </use>
+
+  <!-- Ground object -->
+  <rect id="grass" x="0" y="70%" width="100%" height="30%" fill="#008013" />
+
+  <!-- Clock object -->
   <text id="digitalClock">--:--</text>
 
   <!-- Stats area -->

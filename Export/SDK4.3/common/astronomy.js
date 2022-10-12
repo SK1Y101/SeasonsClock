@@ -1,12 +1,12 @@
 // Define some standard Maths shorthands
-function deg2rad(deg) { return deg * Math.PI / 180; };
-function rad2deg(rad) { return rad * 180 / Math.PI; };
-function sin(deg) { return Math.sin(deg2rad(deg)); };
-function cos(deg) { return Math.cos(deg2rad(deg)); };
-function tan(deg) { return Math.tan(deg2rad(deg)); };
-function asin(num) { return rad2deg(Math.asin(num)); };
-function acos(num) { return rad2deg(Math.acos(num)); };
-function atan(num) { return rad2deg(Math.atan(num)); };
+export function deg2rad(deg) { return deg * Math.PI / 180; };
+export function rad2deg(rad) { return rad * 180 / Math.PI; };
+export function sin(deg) { return Math.sin(deg2rad(deg)); };
+export function cos(deg) { return Math.cos(deg2rad(deg)); };
+export function tan(deg) { return Math.tan(deg2rad(deg)); };
+export function asin(num) { return rad2deg(Math.asin(num)); };
+export function acos(num) { return rad2deg(Math.acos(num)); };
+export function atan(num) { return rad2deg(Math.atan(num)); };
 
 // Define some helper functions.
 function J2000(now) {
@@ -42,25 +42,25 @@ export function sunPos(now, lat=0, lon=0) {
     const sinLatDec = sin(lat) * sin(dec);
     const cosLatDec = cos(lat) * cos(dec);
     // Compute the hour angle of different points of time.
-    const astroW = acos((sin(-18) - sinLatDec) / cosLatDec);
-    const nauticalW = acos((sin(-12) - sinLatDec) / cosLatDec);
-    const civilW = acos((sin(-6) - sinLatDec) / cosLatDec);
-    const sunriseW = acos((sin(-0.83) - sinLatDec) / cosLatDec);
+    // const astroW = acos((sin(-18) - sinLatDec) / cosLatDec);
+    // const nauticalW = acos((sin(-12) - sinLatDec) / cosLatDec);
+    // const civilW = acos((sin(-6) - sinLatDec) / cosLatDec);
+    // const sunriseW = acos((sin(-0.83) - sinLatDec) / cosLatDec);
     // compute the altitude of the sun at midday/midnight.
-    const a_noon = asin(sinLatDec + cosLatDec*cos(15*(Jth-12)));
-    const a_midnight = asin(sinLatDec + cosLatDec*cos(15*Jth));
+    // const a_noon = asin(sinLatDec + cosLatDec*cos(15*(Jth-12)));
+    // const a_midnight = asin(sinLatDec + cosLatDec*cos(15*Jth));
     // compute the times for each event and return
     return {
         "noon":         J2Date(Jt),
-        "sunrise":      J2Date(Jt - sunriseW/360),
-        "sunset":       J2Date(Jt + sunriseW/360),
-        "civilrise":    J2Date(Jt - civilW/360),
-        "civilset":     J2Date(Jt + civilW/360),
-        "nauticalrise": J2Date(Jt - nauticalW/360),
-        "nauticalset":  J2Date(Jt + nauticalW/360),
-        "astrorise":    J2Date(Jt - astroW/360),
-        "astroset":     J2Date(Jt + astroW/360),
-        "midday_alt":   a_noon,
-        "midnight_alt": a_midnight,
+        // "sunrise":      J2Date(Jt - sunriseW/360),
+        // "sunset":       J2Date(Jt + sunriseW/360),
+        // "civilrise":    J2Date(Jt - civilW/360),
+        // "civilset":     J2Date(Jt + civilW/360),
+        // "nauticalrise": J2Date(Jt - nauticalW/360),
+        // "nauticalset":  J2Date(Jt + nauticalW/360),
+        // "astrorise":    J2Date(Jt - astroW/360),
+        // "astroset":     J2Date(Jt + astroW/360),
+        "sinLatDec":    sinLatDec,
+        "cosLatDec":    cosLatDec,
     };
 };
