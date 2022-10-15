@@ -6,8 +6,8 @@ import * as util from "../../common/utils";
 import { me as device } from "device";
 
 export let Background = function(doc) {
-    this.midday = 0.3;
-    this.midnight = -0.299;
+    this.midday = 0.5;
+    this.midnight = -0.499;
     const sunObj = doc.getElementById("sun");
     const sunGlow = doc.getElementById("sunglow");
     const moonObj = doc.getElementById("moon");

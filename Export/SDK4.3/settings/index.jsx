@@ -4,13 +4,14 @@ return (
         <Section title={<Text bold align="center">Stats Display Modules</Text>}>
             <AdditiveList
                 settingsKey="shownStats"
-                maxItems="2"
+                maxItems="4"
                 addAction={
                     <Select
                         label="Add Stat to show on the watchface"
                         options={[
-                            {name: "Battery Charge", value:"batCharge"},
-                            {name: "Current Date", value:"curDate"},
+                            {name: "Battery Charge",    value:"batCharge"},
+                            {name: "Battery Remaining", value:"batDisCharge"},
+                            {name: "Current Date",      value:"curDate"},
                         ]}
                     />
                 }

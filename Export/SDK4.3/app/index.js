@@ -30,10 +30,12 @@ let statsDisp = new statsDisaply(document, settings);
 // Define the clock granularity.
 clock.granularity = "minutes";
 
-let tickUpdate = function(evt) {
-  let now = evt.date;
+let now = null;
+let lasttime = null;
+let tickUpdate = function() {
   // but only if the display is on
-  if (display.on) {
+  if (display.on && lasttime!=now) {
+    lasttime = now;
     timeInd.drawTime(now);
     statsDisp.ontick(now);
     background.ontick(now);
@@ -42,10 +44,14 @@ let tickUpdate = function(evt) {
 
 // Update on a clock tick
 clock.ontick = (evt) => {
-  tickUpdate(evt);
+  now = evt.date;
+  now.setSeconds(0, 0);
+  tickUpdate();
 };
 display.onchange = (evt) => {
-  tickUpdate(new Date());
+  if (display.on) {
+    tickUpdate();
+  };
 };
 
 // Define a function to apply our settings
