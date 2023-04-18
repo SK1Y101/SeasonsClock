@@ -40,6 +40,10 @@ let tickUpdate = function() {
     statsDisp.ontick(now);
     background.ontick(now);
   };
+  // force update the module alignment if the date has just changed
+  if (!(now.getHours() || now.getMinutes())) {
+    statsDisp.onNewDay(now);
+  };
 };
 
 // Update on a clock tick

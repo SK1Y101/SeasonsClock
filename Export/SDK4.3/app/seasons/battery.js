@@ -10,19 +10,21 @@ export let batteryIndicator = function () {
 
     // mode switch
     this.times = [];
-    this.avtimes = null;
+    this.charg = [];
+    // this.times = util.loadData("battimes", []);
+    // this.times = util.loadData("batcharg", []);
     this.discharge = false;
     this.dct = null;
 
     // width
-    this.getWidth = function () { return this.discharge ? 2 : 1; };
+    this.getWidth = function () { return this.discharge ? 1.5 : 1; };
 
     // Draw the discharge time
     this.drawdct = function (dct=null) {
         let [d, h, m] = ["--", "--", "--"];
         if (+dct) {
             d = util.zeroPad(dct.getDate() - 1);
-            h = util.zeroPad(dct.getHours() - 1);
+            h = util.zeroPad(dct.getHours());
             m = util.zeroPad(dct.getMinutes());
         };
         util.setText(this.text, d + ":" + h + ":" + m);
@@ -35,23 +37,22 @@ export let batteryIndicator = function () {
         const chrg = battery.chargeLevel;
 
         if (this.discharge) {
-            let dct = null;
             if (char) {
                 this.times = [];
+                this.charg = [];
+                util.removeData("battimes");
+                util.removeData("batcharg");
             } else {
                 // fetch the current time and add it to the array.
                 const now = new Date(); this.times.push(+now);
-                // Compute the moving average.
-                if (this.times.length > 5) { this.avtimes += (1 / this.times.length) * (now - this.times.shift()); }
-                // Compute the standard average.
-                else { this.avtimes = 0; for (let i of this.times) { this.avtimes += i; }; this.avtimes /= this.times.length; };
-                // Compute the timed average per unit charge.
-                const diff = 2 * (+now - this.avtimes) / (this.times.length - 1);
-                // and compute the time for which the battery will run out.
-                dct = new Date(this.times.length > 1 ? diff * chrg : 0);
-                this.dct = +dct ? dct : null;
+                // keep only the last 5 data points
+                if (this.times.length > 5) { this.times.shift(); this.charg.shift(); };
+                util.saveData("battimes", this.times);
+                util.saveData("batcharg", this.charg);
+                // compute the time for which the battery will run out, offset if DST is a thing
+                this.dct = new Date(util.linreg(this.times, this.charg) - 60*60*1000);// (util.DST(now) ? 60*60*1000 : 0););
             };
-            this.drawdct(dct);
+            this.drawdct(this.dct);
         } else {
             util.setText(this.text, util.zeroPad(chrg, "   ") + "%");
         };
@@ -79,9 +80,8 @@ export let batteryIndicator = function () {
     // update onscreen elements
     this.ontick = function (now) {
         if (this.dct) {
-            const nw = new Date();
             const lt = this.times[this.times.length - 1];
-            const df = nw - lt;
+            const df = now - lt;
             this.drawdct(new Date(Math.max(0, +this.dct - df)));
         };
     };

@@ -10,7 +10,7 @@ export function zeroPad(val, def="00") {
 export function getWidth(args=[]) {
   let wid = 0;
   for (let arg of args) { wid += arg.getBBox().width; };
-  return Math.min(3, Math.ceil(wid / 100));
+  return Math.min(3, Math.ceil(wid / 50));
 };
 
 // Change the z axis height
@@ -118,6 +118,33 @@ export function removeData(fName,defName) {
   } catch(err) {
     logerror(err,"remove "+fName);
   };
+};
+
+// perform linear regression to compute the future value of something
+export function linreg(x, y, y_to_fit = 0) {
+  if (x.length < 2) { return null } else {
+    // Compute the sums of things
+    let sx = 0; let sx2 = 0; let sxy = 0; let sy = 0;
+    for (let i=0; i<x.length; i++) {
+      let xi = x[i];
+      let yi = y[i];
+      sx += xi;
+      sy += yi;
+      sx2 += xi*xi;
+      sxy += xi*yi;
+    };
+    // Linear regression
+    const m = (n*sxy - sx*sy) / (n*sx2 - sx*sx); const c = (sy-m*sx) / n;
+    // find the value of x for when y = y_to_fit
+    return (y_to_fit - c) / m;
+  };
+};
+
+// Determine whether the user is currently experiencing DST
+export function DST(now) {
+  let jan = new Date(now.getFullYear(), 0, 1).getTimezoneOffset();
+  let jul = new Date(now.getFullYear(), 6, 1).getTimezoneOffset();
+  return Math.max(jan, jul) !== now.getTimezoneOffset();    
 };
 
 // fetch the date as a nicely formatted string

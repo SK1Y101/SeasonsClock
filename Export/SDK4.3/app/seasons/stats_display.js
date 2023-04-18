@@ -41,6 +41,9 @@ export let statsDisaply = function(doc, settings) {
                 return dateInd;
         };
     };
+    
+    // force-update the module placement
+    this.onNewDay = function(now) { moduleplacer.placeModules(); };
 
     this.changeStats = function(statsList) {
         // fetch the number of stats to draw
@@ -78,4 +81,4 @@ export let statsDisaply = function(doc, settings) {
             };
         };
     };
-}
+};

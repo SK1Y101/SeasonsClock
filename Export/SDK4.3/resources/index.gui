@@ -10,9 +10,38 @@
         gradient-opacity2="0" />
       <circle id="icon" r="5%" fill="inherit" opacity="0.8"/>
     </symbol>
+    <symbol id="star">
+      <circle r="1" fill="inherit" opacity="0.8"/>
+    </symbol>
   </defs>
   <!-- Background -->
   <rect id="background"/>
+  <!-- Stars -->
+  <svg id="star_fill" x="50%" y="50%" fill="white" opacity="0.8" width="10%" height="10%">
+    <g id="star_rot" transform="rotate(0)">
+      <svg id="north_stars">
+        <!-- Polaris at the top, south pointing to +y -->
+        <svg id="ursa_minor" x="0%" y="0%">
+          <use href="#star" x=  "0%" y=  "6%"/>
+          <use href="#star" x="-23%" y= "29%"/>
+          <use href="#star" x="-35%" y= "71%"/>
+          <use href="#star" x="-23%" y="119%"/>
+          <use href="#star" x="-48%" y="132%"/>
+          <use href="#star" x=  "6%" y="161%"/>
+          <use href="#star" x="-16%" y="184%"/>
+        </svg>
+        <g transform="rotate(-160)">
+        <svg id="cassiopeia" x="-160%" y="-260%">
+          <use href="#star" x= "80%" y= "-35%"/>
+          <use href="#star" x= "42%" y= "-7%"/>
+          <use href="#star" x= "7%" y= "0%"/>
+          <use href="#star" x= "33%" y= "35%"/>
+          <use href="#star" x= "85%" y= "7%"/>
+        </svg>
+        </g>
+      </svg>
+    </g>
+  </svg>
   <!-- Sun object -->
   <use id="sun" href="#glowing" x="50%" y="50%">
     <set href="glow" attributeName="id" to="sunglow" />
