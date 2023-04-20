@@ -17,26 +17,53 @@
   <!-- Background -->
   <rect id="background"/>
   <!-- Stars -->
-  <svg id="star_fill" x="50%" y="50%" fill="white" opacity="0.8" width="10%" height="10%">
+  <svg id="star_fill" x="50%" y="50%" fill="rgb(255,244,234)" opacity="0.8" width="10%" height="10%">
     <g id="star_rot" transform="rotate(0)">
       <svg id="north_stars">
-        <!-- Polaris at the top, south pointing to +y -->
+        <!-- 0h RA pointing to -y (top) (1h RA = 15 deg)-->
+        <!-- 130% is equivalent to 10 degrees dec -->
+        <!-- http://www.isthe.com/chongo/tech/astro/HR-temp-mass-table-byhrclass.html -->
+        <g transform="rotate(225)">
         <svg id="ursa_minor" x="0%" y="0%">
-          <use href="#star" x=  "0%" y=  "6%"/>
-          <use href="#star" x="-23%" y= "29%"/>
-          <use href="#star" x="-35%" y= "71%"/>
-          <use href="#star" x="-23%" y="119%"/>
-          <use href="#star" x="-48%" y="132%"/>
-          <use href="#star" x=  "6%" y="161%"/>
-          <use href="#star" x="-16%" y="184%"/>
+          <use href="#star" x=  "0%" y=  "6%" fill="rgb(255,243,250)"/>
+          <use href="#star" x="-23%" y= "29%" fill="rgb(181,199,255)"/>
+          <use href="#star" x="-35%" y= "71%" fill="rgb(202,215,255)"/>
+          <use href="#star" x="-23%" y="119%" fill="rgb(191,207,255)"/>
+          <use href="#star" x="-48%" y="132%" fill="rgb(248,247,255)"/>
+          <use href="#star" x=  "6%" y="161%" fill="rgb(255,211,146)"/>
+          <use href="#star" x="-16%" y="184%" fill="rgb(189,204,255)"/>
         </svg>
-        <g transform="rotate(-160)">
-        <svg id="cassiopeia" x="-160%" y="-260%">
-          <use href="#star" x= "80%" y= "-35%"/>
-          <use href="#star" x= "42%" y= "-7%"/>
-          <use href="#star" x= "7%" y= "0%"/>
-          <use href="#star" x= "33%" y= "35%"/>
-          <use href="#star" x= "85%" y= "7%"/>
+        </g>
+        <g transform="rotate(15)">
+        <svg id="cassiopeia" x="0%" y="260%">
+          <use href="#star" x="80%" y="-35%" fill="rgb(165,185,255)"/>
+          <use href="#star" x="42%" y= "-7%" fill="rgb(212,220,255)"/>
+          <use href="#star" x= "7%" y=  "0%" fill="rgb(156,178,255)"/>
+          <use href="#star" x="33%" y= "35%" fill="rgb(255,227,290)"/>
+          <use href="#star" x="85%" y=  "7%" fill="rgb(241,241,255)"/>
+        </svg>
+        </g>
+        <g transform="rotate(120)">
+        <svg id="lynx" x="0%" y="520%">
+          <use href="#star" x="-132%" y=  "37%" fill="rgb(255,208,142)"/>
+          <use href="#star" x="-128%" y=  "26%" fill="rgb(191,207,255)"/>
+          <use href="#star" x= "-99%" y= "-12%" fill="rgb(230,233,255)"/>
+          <use href="#star" x= "-37%" y= "-21%" fill="rgb(255,211,146)"/>
+          <use href="#star" x=  "54%" y= "-60%" fill="rgb(185,201,255)"/>
+          <use href="#star" x= "102%" y="-120%" fill="rgb(255,231,199)"/>
+          <use href="#star" x= "163%" y="-124%" fill="rgb(187,203,255)"/>
+        </svg>
+        </g>
+        <g transform="rotate(180)">
+        <!-- zero point is 12h +50deg -->
+        <svg id="ursa_major" x="0%" y="390%">
+          <use href="#star" x="-175%" y=  "4%" fill="rgb(165,185,255)"/>
+          <use href="#star" x="-136%" y="-30%" fill="rgb(187,203,255)"/>
+          <use href="#star" x= "-88%" y="-39%" fill="rgb(186,204,255)"/>
+          <use href="#star" x= "-25%" y="-46%" fill="rgb(191,207,255)"/>
+          <use href="#star" x=  "10%" y="-24%" fill="rgb(185,201,255)"/>
+          <use href="#star" x=  "95%" y="-41%" fill="rgb(183,200,255)"/>
+          <use href="#star" x=  "91%" y="-76%" fill="rgb(255,227,190)"/>
         </svg>
         </g>
       </svg>
@@ -48,8 +75,10 @@
   </use>
   <!-- Moon object -->
   <use id="moon" href="#glowing" x="50%" y="50%">
+    <set href="glow" attributeName="gradient-x2" to="90%" />
+    <set href="glow" attributeName="gradient-y2" to="90%" />
     <set href="glow" attributeName="id" to="moonglow" />
-    <set href="icon" attributeName="r" to="14.5" />
+    <set href="icon" attributeName="r" to="4%" />
   </use>
 
   <!-- Ground object -->

@@ -9,12 +9,12 @@ export let batteryIndicator = function () {
     this.icon = null;
 
     // mode switch
-    this.times = [];
-    this.charg = [];
-    // this.times = util.loadData("battimes", []);
-    // this.times = util.loadData("batcharg", []);
-    this.discharge = false;
     this.dct = null;
+    // this.times = [];
+    // this.charg = [];
+    this.times = util.loadData("battimes", []);
+    this.charg = util.loadData("batcharg", []);
+    this.discharge = false;
 
     // width
     this.getWidth = function () { return this.discharge ? 1.5 : 1; };
@@ -37,22 +37,24 @@ export let batteryIndicator = function () {
         const chrg = battery.chargeLevel;
 
         if (this.discharge) {
+            let dct = null;
+            // show recharge as well as discharge time
             if (char) {
                 this.times = [];
                 this.charg = [];
-                util.removeData("battimes");
-                util.removeData("batcharg");
-            } else {
-                // fetch the current time and add it to the array.
-                const now = new Date(); this.times.push(+now);
-                // keep only the last 5 data points
-                if (this.times.length > 5) { this.times.shift(); this.charg.shift(); };
-                util.saveData("battimes", this.times);
-                util.saveData("batcharg", this.charg);
-                // compute the time for which the battery will run out, offset if DST is a thing
-                this.dct = new Date(util.linreg(this.times, this.charg) - 60*60*1000);// (util.DST(now) ? 60*60*1000 : 0););
             };
-            this.drawdct(this.dct);
+            // fetch the current time and add it to the array.
+            const now = new Date(); this.times.push(+now); this.charg.push(chrg);
+            // keep only the last 5 data points
+            if (this.times.length > 5) { this.times.shift(); this.charg.shift(); };
+            // Compute the time the battery will reach the charge limit, subtract the current time to get the time remaining
+            // dct = new Date(max(0, util.linreg(this.times, this.charg, char ? 100 : 0) - +now)-60*60*1000);
+            dct = new Date(Math.max(0, util.linreg(this.times,this.charg) - +now));
+            this.dct = +dct ? dct : null;
+            // save and display
+            util.saveData("battimes", this.times);
+            util.saveData("batcharg", this.charg);
+            this.drawdct(dct);
         } else {
             util.setText(this.text, util.zeroPad(chrg, "   ") + "%");
         };
@@ -82,6 +84,7 @@ export let batteryIndicator = function () {
         if (this.dct) {
             const lt = this.times[this.times.length - 1];
             const df = now - lt;
+            // take away the difference since the last reading, and draw
             this.drawdct(new Date(Math.max(0, +this.dct - df)));
         };
     };

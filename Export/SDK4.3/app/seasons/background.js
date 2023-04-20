@@ -11,12 +11,16 @@ const w = device.screen.width; const h = device.screen.height; const maxy = 0.7*
 function padHex(val) { return util.zeroPad(Math.round(val).toString(16)); };
 function lerp(a,b,t=0) { return t<=0 ? a : t>=1 ? b : a*(1-t) + b*t; };
 function lerpHex(a, b, t=0) {
-    const [r1, g1, b1] = a.match(/\w\w/g).map(x => parseInt(x, 16));
-    const [r2, g2, b2] = b.match(/\w\w/g).map(x => parseInt(x, 16));
-    const r3 = lerp(r1, r2, t);
-    const g3 = lerp(g1, g2, t);
-    const b3 = lerp(b1, b2, t);
-    return "#"+padHex(r3)+padHex(g3)+padHex(b3);
+    if (t<=0) { return a; }
+    else if (t >= 1) { return b; }
+    else {
+        const [r1, g1, b1] = a.match(/\w\w/g).map(x => parseInt(x, 16));
+        const [r2, g2, b2] = b.match(/\w\w/g).map(x => parseInt(x, 16));
+        const r3 = lerp(r1, r2, t);
+        const g3 = lerp(g1, g2, t);
+        const b3 = lerp(b1, b2, t);
+        return "#"+padHex(r3)+padHex(g3)+padHex(b3);
+    };
 };
 
 // A sky crossing object
@@ -35,17 +39,20 @@ let skyObject = function(doc, name, skycolour, horizoncolour, colouralt) {
     this.obj = doc.getElementById(name);
     this.glow = doc.getElementById(name+"glow");
     // Update colour
-    this.updateColour = function(y) {
-        let col = lerpHex(this.horizonColour, this.skyColour, this.colourAlt*y);
+    this.updateColour = function(y, sun_y=null) {
+        // if this object is the moon, don't use the horizon colour if the sun is in the sky
+        let colour_y = (sun_y == null || sun_y < 0.1 ? this.colourAlt*y : 1);
+        let col = lerpHex(this.horizonColour, this.skyColour, colour_y);
         util.updateColour(this.obj, col);
         this.glow.gradient.colors.c1 = col;
+        this.glow.style.opacity = (sun_y == null ? 1 : Math.max(0, (-90/9)*sun_y));
     };
     // Update position
-    this.updatePos = function(x, y) {
+    this.updatePos = function(x, y, sun_y=null) {
         // x and y are normalised fractions of the viewport
         this.obj.x = w*x;
         this.obj.y = maxy*(1-y);
-        this.updateColour(y);
+        this.updateColour(y, sun_y)
     };
 };
 
@@ -68,21 +75,21 @@ export let Background = function(doc) {
     const daySky = "#87ceeb";
     const sunsetSky = "#51a4d0";
     const nightSky = "#0b1026";
-    // star colour
-    const dayStar = daySky;
-    const sunsetStar = sunsetSky;
-    const nightStar = "#d1d7d7";
+    // star opacity
+    const dayStar = 0;
+    const sunsetStar = 0.2;
+    const nightStar = 0.8;
 
     // astro object properties
     this.solar_high_h = 0.5 // fraction of viewport
     this.solar_high_t = 0.5 // 0 = 0, 0.5 = 12:00, 1 = 24:00
     this.solar_low_h = -0.5
     this.solar_low_t = 0
+    this.solar_day = 2*Math.abs(this.solar_high_t - this.solar_low_t);
 
     this.lunar_high_h = 0.5 // fraction of viewport
-    this.lunar_high_t = 1 // 0 = 0, 0.5 = 12:00, 1 = 24:00
     this.lunar_low_h = -0.5
-    this.lunar_low_t = 0.5
+    this.lunar_phase = 0.25 // 0 = new-moon, 0.5=full-moon, 1=new-moon again
 
     // this.lunar_phase = (this.lunar_high_t-this.solar_high_t)%1  // 0 = new, 0.5 = full, 1 = new
 
@@ -101,37 +108,36 @@ export let Background = function(doc) {
         // sky colour at different times
         let skycol = daySky;
         let grasscol = dayGrass;
-        let starcol = dayStar;
+        let staropac = dayStar;
         if (y>0) {
             skycol = lerpHex(sunsetSky, daySky, sry);
             grasscol = lerpHex(sunsetGrass, dayGrass, sry);
-            starcol = lerpHex(sunsetStar, dayStar, sry);
+            staropac = lerp(dayStar, sunsetStar, sry);
         }
+        // lerp between sunrise/set colour and night colour for the 18 degrees below the horizon.
         else {
             skycol = lerpHex(sunsetSky, nightSky, (-90/18)*y);
             grasscol = lerpHex(sunsetGrass, nightGrass, (-90/18)*y);
-            starcol = lerpHex(sunsetStar, nightStar, (-90/18)*y);
+            staropac = lerp(sunsetStar, nightStar, (-90/18)*y);
         };
         util.updateColour(skyObj, skycol);
         util.updateColour(grassObj, grasscol);
-        util.updateColour(starObj, starcol);
-    };
-
-    function xy(now, high_h=0.5, high_t=0.5, low_h=-0.5, low_t=1) {
-        // how far through it's 'day' is this object
-        let day_len = 2*(Math.max(high_t, low_t)-Math.min(high_t, low_t));
-        let skyfrac = 2*((astro.dayFrac(now) + (high_t-0.5))%day_len - 0.25);// -.5 >= dayfrac >= 1.5
-        return [skyfrac, 0.5*(Math.sin(Math.PI*skyfrac)+1)*(high_h-low_h)+low_h];
+        util.updateOpacity(starObj, staropac);
     };
 
     this.ontick = function(now) {
-        // update the sun and moon positions
-        const [sunx, suny] = xy(now, this.solar_high_h, this.solar_high_t, this.solar_low_h, this.solar_low_t);
-        const [moonx, moony] = xy(now, this.lunar_high_h, this.lunar_high_t, this.lunar_low_h, this.lunar_low_t);
-        sunObj.updatePos(sunx, suny);
-        moonObj.updatePos(moonx, moony);
+        let dayfrac = astro.dayFrac(now);
+        // compute the position of the sun
+        let sunx = 2*((dayfrac + (this.solar_high_t-0.5))%this.solar_day - 0.25);// -.5 >= dayfrac >= 1.5
+        let suny = 0.5*(Math.sin(Math.PI*sunx)+1)*(this.solar_high_h-this.solar_low_h)+this.solar_low_h;
+        // compute the position of the moon
+        let moonx = 2*((dayfrac - this.lunar_phase)%1)-0.5;
+        let moony = 0.5*(Math.sin(Math.PI*moonx)+1)*(this.lunar_high_h-this.lunar_low_h)+this.lunar_low_h;
         // change the background colour
         bgCol(suny);
+        // update the positions of the sun and moon
+        sunObj.updatePos(sunx, suny);
+        moonObj.updatePos(moonx, moony, suny);
         // rotate the starfield
         starRot.groupTransform.rotate.angle = 360*astro.dayFrac(now);
     };

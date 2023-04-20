@@ -67,6 +67,15 @@ export function updateColour(ele, colour) {
     ele.style.fill=colour;
   };
 }
+export function updateOpacity(ele, opacity) {
+  try {
+    ele.forEach(function(eles) {
+      eles.style.opacity = opacity;
+    });
+  } catch(err) {
+    ele.style.opacity=opacity;
+  };
+}
 
 // set the text of an element
 export function setText(ele, text) {
@@ -122,22 +131,23 @@ export function removeData(fName,defName) {
 
 // perform linear regression to compute the future value of something
 export function linreg(x, y, y_to_fit = 0) {
-  if (x.length < 2) { return null } else {
-    // Compute the sums of things
-    let sx = 0; let sx2 = 0; let sxy = 0; let sy = 0;
-    for (let i=0; i<x.length; i++) {
-      let xi = x[i];
-      let yi = y[i];
-      sx += xi;
-      sy += yi;
-      sx2 += xi*xi;
-      sxy += xi*yi;
-    };
-    // Linear regression
-    const m = (n*sxy - sx*sy) / (n*sx2 - sx*sx); const c = (sy-m*sx) / n;
-    // find the value of x for when y = y_to_fit
-    return (y_to_fit - c) / m;
-  };
+  let small_num = 0.0000000001;
+  if (x.length > 1) {
+    // // Compute the sums of things
+    // const n = x.length; let sx = 0; let sxx = 0; let sxy = 0; let sy = 0;
+    // for (let i=0; i<n; i++) {
+    //   let xi = x[i]; let yi = y[i];
+    //   sx = sx + xi; sy = sy + yi;
+    //   sxx = sxx + xi*xi; sxy = sxy + xi*yi;
+    // };
+    // // Linear regression
+    // const m = (n*sxy - sx*sy) / (n*sxx - sx*sx); const c = (sy-m*sx) / n;
+    // // find the value of x for when y = y_to_fit
+    // return (y_to_fit - c) / m;
+    const m = (y[0] - y[y.length-1]) / (x[0] - x[x.length-1] + small_num) + small_num;
+    // y-y_1 = m(x-x_1)
+    return (y_to_fit - y[y.length-1]) / m + x[x.length-1];
+  } else { return 0; };
 };
 
 // Determine whether the user is currently experiencing DST
