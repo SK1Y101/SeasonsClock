@@ -4,7 +4,7 @@
       <gradientRect id="glow" x="-10%" y="-10%" width="20%" height="20%"
         gradient-type="radial"
         gradient-x1="50%" gradient-y1="50%"
-        gradient-x2="100%" gradient-y2="100%"
+        gradient-x2="95%" gradient-y2="95%"
         gradient-color1="white"
         gradient-color2="white"
         gradient-opacity2="0" />
@@ -17,55 +17,57 @@
   <!-- Background -->
   <rect id="background"/>
   <!-- Stars -->
-  <svg id="star_fill" x="50%" y="50%" fill="rgb(255,244,234)" opacity="0.8" width="10%" height="10%">
+  <svg id="star_fill" x="50%" y="50%" fill="rgb(255,244,234)" opacity="0.8" width="8%" height="8%">
     <g id="star_rot" transform="rotate(0)">
+      <!-- Offset in pixels from origin -->
       <svg id="north_stars">
-        <!-- 0h RA pointing to -y (top) (1h RA = 15 deg)-->
-        <!-- 130% is equivalent to 10 degrees dec -->
         <!-- http://www.isthe.com/chongo/tech/astro/HR-temp-mass-table-byhrclass.html -->
-        <g transform="rotate(225)">
-        <svg id="ursa_minor" x="0%" y="0%">
-          <use href="#star" x=  "0%" y=  "6%" fill="rgb(255,243,250)"/>
-          <use href="#star" x="-23%" y= "29%" fill="rgb(181,199,255)"/>
-          <use href="#star" x="-35%" y= "71%" fill="rgb(202,215,255)"/>
-          <use href="#star" x="-23%" y="119%" fill="rgb(191,207,255)"/>
-          <use href="#star" x="-48%" y="132%" fill="rgb(248,247,255)"/>
-          <use href="#star" x=  "6%" y="161%" fill="rgb(255,211,146)"/>
-          <use href="#star" x="-16%" y="184%" fill="rgb(189,204,255)"/>
-        </svg>
-        </g>
-        <g transform="rotate(15)">
-        <svg id="cassiopeia" x="0%" y="260%">
-          <use href="#star" x="80%" y="-35%" fill="rgb(165,185,255)"/>
-          <use href="#star" x="42%" y= "-7%" fill="rgb(212,220,255)"/>
-          <use href="#star" x= "7%" y=  "0%" fill="rgb(156,178,255)"/>
-          <use href="#star" x="33%" y= "35%" fill="rgb(255,227,290)"/>
-          <use href="#star" x="85%" y=  "7%" fill="rgb(241,241,255)"/>
-        </svg>
-        </g>
-        <g transform="rotate(120)">
-        <svg id="lynx" x="0%" y="520%">
-          <use href="#star" x="-132%" y=  "37%" fill="rgb(255,208,142)"/>
-          <use href="#star" x="-128%" y=  "26%" fill="rgb(191,207,255)"/>
-          <use href="#star" x= "-99%" y= "-12%" fill="rgb(230,233,255)"/>
-          <use href="#star" x= "-37%" y= "-21%" fill="rgb(255,211,146)"/>
-          <use href="#star" x=  "54%" y= "-60%" fill="rgb(185,201,255)"/>
-          <use href="#star" x= "102%" y="-120%" fill="rgb(255,231,199)"/>
-          <use href="#star" x= "163%" y="-124%" fill="rgb(187,203,255)"/>
-        </svg>
-        </g>
-        <g transform="rotate(180)">
-        <!-- zero point is 12h +50deg -->
-        <svg id="ursa_major" x="0%" y="390%">
-          <use href="#star" x="-175%" y=  "4%" fill="rgb(165,185,255)"/>
-          <use href="#star" x="-136%" y="-30%" fill="rgb(187,203,255)"/>
-          <use href="#star" x= "-88%" y="-39%" fill="rgb(186,204,255)"/>
-          <use href="#star" x= "-25%" y="-46%" fill="rgb(191,207,255)"/>
-          <use href="#star" x=  "10%" y="-24%" fill="rgb(185,201,255)"/>
-          <use href="#star" x=  "95%" y="-41%" fill="rgb(183,200,255)"/>
-          <use href="#star" x=  "91%" y="-76%" fill="rgb(255,227,190)"/>
-        </svg>
-        </g>
+        <!-- https://upload.wikimedia.org/wikipedia/commons/c/c7/North_Hemisphere.png -->
+        <!--- ursa minor -->
+        <use href="#star" x="  -7%" y="   6%" fill="rgb(255,243,250)"/>
+        <use href="#star" x="  43%" y="  -6%" fill="rgb(181,199,255)"/>
+        <use href="#star" x="  98%" y=" -34%" fill="rgb(202,215,255)"/>
+        <use href="#star" x=" 132%" y=" -90%" fill="rgb(191,207,255)"/>
+        <use href="#star" x=" 168%" y=" -82%" fill="rgb(248,247,255)"/>
+        <use href="#star" x=" 141%" y="-154%" fill="rgb(255,211,146)"/>
+        <use href="#star" x=" 183%" y="-154%" fill="rgb(189,204,255)"/>
+        <!-- cassiopeia -->
+        <use href="#star" x="  72%" y=" 405%" fill="rgb(165,185,255)"/>
+        <use href="#star" x=" -88%" y=" 426%" fill="rgb(212,220,255)"/>
+        <use href="#star" x=" -96%" y=" 373%" fill="rgb(156,178,255)"/>
+        <use href="#star" x="-145%" y=" 364%" fill="rgb(255,227,290)"/>
+        <use href="#star" x="-168%" y=" 303%" fill="rgb(241,241,255)"/>
+        <!-- lynx -->
+        <use href="#star" x="-469%" y="-567%" fill="rgb(255,208,142)"/>
+        <use href="#star" x="-454%" y="-538%" fill="rgb(191,207,255)"/>
+        <use href="#star" x="-449%" y="-454%" fill="rgb(230,233,255)"/>
+        <use href="#star" x="-502%" y="-363%" fill="rgb(255,211,146)"/>
+        <use href="#star" x="-501%" y="-201%" fill="rgb(185,201,255)"/>
+        <use href="#star" x="-404%" y="-105%" fill="rgb(255,231,199)"/>
+        <use href="#star" x="-408%" y=" -37%" fill="rgb(187,203,255)"/>
+        <!-- ursa major -->
+        <use href="#star" x=" 254%" y="-480%" fill="rgb(165,185,255)"/>
+        <use href="#star" x=" 166%" y="-433%" fill="rgb(187,203,255)"/>
+        <use href="#star" x=" 109%" y="-437%" fill="rgb(186,204,255)"/>
+        <use href="#star" x="  29%" y="-435%" fill="rgb(191,207,255)"/>
+        <use href="#star" x=" -13%" y="-480%" fill="rgb(185,201,255)"/>
+        <use href="#star" x="-112%" y="-431%" fill="rgb(183,200,255)"/>
+        <use href="#star" x=" -91%" y="-362%" fill="rgb(255,227,190)"/>
+        <!-- draco -->
+        <use href="#star" x=" -34%" y="-271%" fill="rgb(255,203,132)"/>
+        <use href="#star" x="  38%" y="-264%" fill="rgb(170,190,255)"/>
+        <use href="#star" x=" 174%" y="-290%" fill="rgb(188,205,255)"/>
+        <use href="#star" x=" 319%" y="-257%" fill="rgb(255,221,175)"/>
+        <use href="#star" x=" 360%" y="-205%" fill="rgb(255,252,253)"/>
+        <use href="#star" x=" 343%" y="-153%" fill="rgb(255,231,199)"/>
+        <use href="#star" x=" 311%" y=" -81%" fill="rgb(170,190,255)"/>
+        <use href="#star" x=" 233%" y=" -19%" fill="rgb(248,247,255)"/>
+        <use href="#star" x=" 230%" y=" 117%" fill="rgb(246,243,255)"/>
+        <use href="#star" x=" 278%" y="  91%" fill="rgb(255,231,199)"/>
+        <use href="#star" x=" 436%" y=" -12%" fill="rgb(255,221,175)"/>
+        <use href="#star" x=" 456%" y=" -55%" fill="rgb(213,222,255)"/>
+        <use href="#star" x=" 493%" y=" -64%" fill="rgb(255,241,221)"/>
+        <use href="#star" x=" 508%" y="  -7%" fill="rgb(255,204,138)"/>
       </svg>
     </g>
   </svg>

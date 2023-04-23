@@ -80,18 +80,9 @@ export let Background = function(doc) {
     const sunsetStar = 0.2;
     const nightStar = 0.8;
 
-    // astro object properties
-    this.solar_high_h = 0.5 // fraction of viewport
-    this.solar_high_t = 0.5 // 0 = 0, 0.5 = 12:00, 1 = 24:00
-    this.solar_low_h = -0.5
-    this.solar_low_t = 0
-    this.solar_day = 2*Math.abs(this.solar_high_t - this.solar_low_t);
-
-    this.lunar_high_h = 0.5 // fraction of viewport
-    this.lunar_low_h = -0.5
-    this.lunar_phase = 0.25 // 0 = new-moon, 0.5=full-moon, 1=new-moon again
-
-    // this.lunar_phase = (this.lunar_high_t-this.solar_high_t)%1  // 0 = new, 0.5 = full, 1 = new
+    // user position
+    this.latitude = 51.5;
+    this.longitude = -0.6
 
     // function lerpn(a,t=0) {
     //     let n = a.length; let t1 = n*t; let i = Math.floor(t1); let d = t1-i;
@@ -125,20 +116,29 @@ export let Background = function(doc) {
         util.updateOpacity(starObj, staropac);
     };
 
+    this.solar_high_t = 0.5 // 0 = 0, 0.5 = 12:00, 1 = 24:00
+
     this.ontick = function(now) {
         let dayfrac = astro.dayFrac(now);
+        let astrofrac = astro.astroYearFrac(now);
+        let tilt = 23.5*Math.sin(Math.PI*2*astrofrac);
         // compute the position of the sun
-        let sunx = 2*((dayfrac + (this.solar_high_t-0.5))%this.solar_day - 0.25);// -.5 >= dayfrac >= 1.5
-        let suny = 0.5*(Math.sin(Math.PI*sunx)+1)*(this.solar_high_h-this.solar_low_h)+this.solar_low_h;
+        let solar_high = 1 - Math.abs(this.latitude - tilt)/90;
+        let solar_low = Math.abs(this.latitude + tilt)/90 - 1;
+        let solar_extent = solar_high-solar_low
+        let sunx = 2*((dayfrac + (this.solar_high_t-0.5))%1 - 0.25);// -.5 >= dayfrac >= 1.5
+        let suny = 0.5*(Math.sin(Math.PI*sunx)+1)*solar_extent+solar_low;
         // compute the position of the moon
-        let moonx = 2*((dayfrac - this.lunar_phase)%1)-0.5;
-        let moony = 0.5*(Math.sin(Math.PI*moonx)+1)*(this.lunar_high_h-this.lunar_low_h)+this.lunar_low_h;
+        let lunar_phase = astro.lunarPhase(now);
+        let lunar_inc = astro.lunarInc(now)/90;
+        let moonx = 2*((dayfrac - lunar_phase)%1)-0.5;
+        let moony = 0.5*(Math.sin(Math.PI*moonx)+1)*solar_extent+solar_low+lunar_inc;
         // change the background colour
         bgCol(suny);
         // update the positions of the sun and moon
         sunObj.updatePos(sunx, suny);
         moonObj.updatePos(moonx, moony, suny);
         // rotate the starfield
-        starRot.groupTransform.rotate.angle = 360*astro.dayFrac(now);
+        starRot.groupTransform.rotate.angle = 360*astrofrac;
     };
 };

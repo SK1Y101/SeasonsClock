@@ -18,6 +18,35 @@ function J2Date(JDate) {
 export function dayFrac(date) {
     return (date - new Date(date.valueOf()).setUTCHours(0,0,0,0))/86400000;
 };
+export function leapYear(date) {
+    return (new Date(this_year,0,0) - new Date(date.getFullYear()-1,0,0)) == 366;
+};
+export function daysThisYear(date) {
+    return new Date(this_year,0,0) - new Date(date.getFullYear()-1,0,0);
+};
+export function yearFrac(date) {
+    return (date - new Date(date.getFullYear(),0,0))/daysThisYear(date);
+};
+export function astroYearFrac(date) {
+    const equinox = leapYear(date) ? 80/366 : 79/365;
+    return (yearFrac(date)-equinox)%1;
+};
+//aproximate the motion of the moon
+export function lunarPhase(date) {
+    // provides the phase of the moon, 0->1 (new->new)
+    let synodic = 29.530589 * 86400000;
+    let newmoon = new Date(2023,3,20,5,12);
+    let phase = Math.abs((date.getTime() - newmoon.getTime()) / synodic);
+    return phase - Math.floor(phase);
+};
+export function lunarInc(date) {
+    // provides the effective inclination of the moon, 0->5.15->0->-5.15->0
+    let sidereal = 27.321661 * 86400000;
+    // http://www.astropixels.com/ephemeris/moon/moonnodes2001.html
+    let moonnode = new Date(2023,3,20,11,32);
+    let inc = Math.abs((date.getTime() - moonnode.getTime()) / sidereal);
+    return Math.sin(2*Math.PI*inc) * 5.15;
+};
 
 // Determine whether the user is currently experiencing DST
 function DST(now) {
