@@ -49,7 +49,8 @@ export let batteryIndicator = function () {
             if (this.times.length > 5) { this.times.shift(); this.charg.shift(); };
             // Compute the time the battery will reach the charge limit, subtract the current time to get the time remaining
             // dct = new Date(max(0, util.linreg(this.times, this.charg, char ? 100 : 0) - +now)-60*60*1000);
-            dct = new Date(Math.max(0, util.linreg(this.times,this.charg) - +now));
+            let est_dct = new Date(Math.max(0, util.linreg(this.times,this.charg) - +now));
+            dct = +dct ? 0.5*(dct + est_dct) : est_dct; // average between the new and old value, should smooth out errors?
             this.dct = +dct ? dct : null;
             // save and display
             util.saveData("battimes", this.times);

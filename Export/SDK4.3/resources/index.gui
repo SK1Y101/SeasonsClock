@@ -1,15 +1,5 @@
 <svg>
   <defs>
-    <symbol id="glowing">
-      <gradientRect id="glow" x="-10%" y="-10%" width="20%" height="20%"
-        gradient-type="radial"
-        gradient-x1="50%" gradient-y1="50%"
-        gradient-x2="95%" gradient-y2="95%"
-        gradient-color1="white"
-        gradient-color2="white"
-        gradient-opacity2="0" />
-      <circle id="icon" r="5%" fill="inherit" opacity="0.8"/>
-    </symbol>
     <symbol id="star">
       <circle r="1" fill="inherit" opacity="0.8"/>
     </symbol>
@@ -72,19 +62,34 @@
     </g>
   </svg>
   <!-- Sun object -->
-  <use id="sun" href="#glowing" x="50%" y="50%">
-    <set href="glow" attributeName="id" to="sunglow" />
-  </use>
+  <svg id="sun" x="50%" y="50%">
+    <gradientRect id="sunglow" x="-10%" y="-10%" width="20%" height="20%"
+      gradient-type="radial"
+      gradient-x1="50%" gradient-y1="50%"
+      gradient-x2="95%" gradient-y2="95%"
+      gradient-color1="white"
+      gradient-color2="white"
+      gradient-opacity2="0"/>
+    <circle r="5%" fill="inherit" opacity="0.8"/>
+  </svg>
   <!-- Moon object -->
-  <use id="moon" href="#glowing" x="50%" y="50%">
-    <set href="glow" attributeName="gradient-x2" to="90%" />
-    <set href="glow" attributeName="gradient-y2" to="90%" />
-    <set href="glow" attributeName="id" to="moonglow" />
-    <set href="icon" attributeName="r" to="4%" />
-  </use>
+  <svg id="moon" x="50%" y="50%">
+    <g id="moonrot" transform="rotate(0)">
+      <gradientRect id="moonglow" x="-10%" y="-10%" width="20%" height="20%"
+        gradient-type="radial"
+        gradient-x1="50%" gradient-y1="50%"
+        gradient-x2="100%" gradient-y2="100%"
+        gradient-color1="inherit"
+        gradient-color2="inherit"
+        gradient-opacity2="0"/>
+      <image href="icons/moon_phase/moon_shade_0.png" fill="slategray" x="-4%" y="-4%" width="8%" height="8%"/>
+      <image href="icons/moon_phase/moon_face.png" fill="inherit" x="-4%" y="-4%" width="8%" height="8%"/>
+      <image id="moonshadow" href="" fill="slategray" x="-4%" y="-4%" width="8%" height="8%" opacity="0.6"/>
+    </g>
+  </svg>
 
   <!-- Ground object -->
-  <rect id="grass" x="0" y="70%" width="100%" height="30%" fill="#008013" />
+  <rect id="grass" x="0" y="65%" width="100%" height="30%" fill="#008013" />
 
   <!-- Clock object -->
   <text id="digitalClock">--:--</text>

@@ -5,7 +5,7 @@ import * as util from "../../common/utils";
 // Import fitbit modules
 import { me as device } from "device";
 
-const w = device.screen.width; const h = device.screen.height; const maxy = 0.7*h;
+const w = device.screen.width; const h = device.screen.height; const maxy = 0.65*h; const maxw = 0.5*w
 
 // some useful maths functions
 function padHex(val) { return util.zeroPad(Math.round(val).toString(16)); };
@@ -36,8 +36,11 @@ let skyObject = function(doc, name, skycolour, horizoncolour, colouralt) {
     this.skyColour = skycolour;
     this.horizonColour = horizoncolour;
     // get elements
+    // positional elements
     this.obj = doc.getElementById(name);
     this.glow = doc.getElementById(name+"glow");
+    this.rot = doc.getElementById(name+"rot");
+    this.shadow = doc.getElementById(name+"shadow");
     // Update colour
     this.updateColour = function(y, sun_y=null) {
         // if this object is the moon, don't use the horizon colour if the sun is in the sky
@@ -47,12 +50,16 @@ let skyObject = function(doc, name, skycolour, horizoncolour, colouralt) {
         this.glow.gradient.colors.c1 = col;
         this.glow.style.opacity = (sun_y == null ? 1 : Math.max(0, (-90/9)*sun_y));
     };
-    // Update position
+    // update phases if given
+    this.updatePhase = function(phase, frac) {
+        this.shadow.href = "icons/moon_phase/moon_shade_"+Math.round(phase*56)%56+".png";
+        this.rot.groupTransform.rotate.angle = 360*frac;
+    };
     this.updatePos = function(x, y, sun_y=null) {
-        // x and y are normalised fractions of the viewport
         this.obj.x = w*x;
-        this.obj.y = maxy*(1-y);
-        this.updateColour(y, sun_y)
+        this.obj.y = maxy - maxw*y;
+        // derive sky position
+        this.updateColour(y, sun_y);
     };
 };
 
@@ -116,8 +123,6 @@ export let Background = function(doc) {
         util.updateOpacity(starObj, staropac);
     };
 
-    this.solar_high_t = 0.5 // 0 = 0, 0.5 = 12:00, 1 = 24:00
-
     this.ontick = function(now) {
         let dayfrac = astro.dayFrac(now);
         let astrofrac = astro.astroYearFrac(now);
@@ -125,20 +130,21 @@ export let Background = function(doc) {
         // compute the position of the sun
         let solar_high = 1 - Math.abs(this.latitude - tilt)/90;
         let solar_low = Math.abs(this.latitude + tilt)/90 - 1;
-        let solar_extent = solar_high-solar_low
-        let sunx = 2*((dayfrac + (this.solar_high_t-0.5))%1 - 0.25);// -.5 >= dayfrac >= 1.5
-        let suny = 0.5*(Math.sin(Math.PI*sunx)+1)*solar_extent+solar_low;
+        let solar_rad = 0.5*(solar_high-solar_low);
+        let solar_cen = 0.5*(solar_high+solar_low);
+        let sunx = dayfrac; let suny = solar_cen - solar_rad*Math.cos(2*Math.PI*sunx);
         // compute the position of the moon
         let lunar_phase = astro.lunarPhase(now);
         let lunar_inc = astro.lunarInc(now)/90;
-        let moonx = 2*((dayfrac - lunar_phase)%1)-0.5;
-        let moony = 0.5*(Math.sin(Math.PI*moonx)+1)*solar_extent+solar_low+lunar_inc;
+        let moonx = (dayfrac - lunar_phase)%1;
+        let moony = solar_cen + lunar_inc - solar_rad*Math.cos(2*Math.PI*moonx);
         // change the background colour
         bgCol(suny);
         // update the positions of the sun and moon
         sunObj.updatePos(sunx, suny);
         moonObj.updatePos(moonx, moony, suny);
-        // rotate the starfield
-        starRot.groupTransform.rotate.angle = 360*astrofrac;
+        // rotate the starfield and moon
+        starRot.groupTransform.rotate.angle = 360*(dayfrac + astrofrac);
+        moonObj.updatePhase(lunar_phase, moonx);
     };
 };

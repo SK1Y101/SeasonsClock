@@ -19,16 +19,19 @@ export function dayFrac(date) {
     return (date - new Date(date.valueOf()).setUTCHours(0,0,0,0))/86400000;
 };
 export function leapYear(date) {
-    return (new Date(this_year,0,0) - new Date(date.getFullYear()-1,0,0)) == 366;
+    let this_year = date.getFullYear();
+    return (new Date(this_year,0,1) - new Date(this_year-1,0,1)) == 366;
 };
 export function daysThisYear(date) {
-    return new Date(this_year,0,0) - new Date(date.getFullYear()-1,0,0);
+    let this_year = date.getFullYear();
+    return new Date(this_year,0,1) - new Date(this_year-1,0,1);
 };
 export function yearFrac(date) {
-    return (date - new Date(date.getFullYear(),0,0))/daysThisYear(date);
+    let this_year = date.getFullYear();
+    return (date - new Date(this_year,0,1)) / (new Date(this_year,0,1) - new Date(this_year-1,0,1));
 };
 export function astroYearFrac(date) {
-    const equinox = leapYear(date) ? 80/366 : 79/365;
+    let equinox = leapYear(date) ? 80/366 : 79/365;
     return (yearFrac(date)-equinox)%1;
 };
 //aproximate the motion of the moon
