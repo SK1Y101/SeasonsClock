@@ -10,7 +10,7 @@ export function zeroPad(val, def="00") {
 export function getWidth(args=[]) {
   let wid = 0;
   for (let arg of args) { wid += arg.getBBox().width; };
-  return Math.min(3, Math.ceil(wid / 100));
+  return Math.min(3, Math.ceil(wid / 50));
 };
 
 // Change the z axis height
@@ -67,6 +67,15 @@ export function updateColour(ele, colour) {
     ele.style.fill=colour;
   };
 }
+export function updateOpacity(ele, opacity) {
+  try {
+    ele.forEach(function(eles) {
+      eles.style.opacity = opacity;
+    });
+  } catch(err) {
+    ele.style.opacity=opacity;
+  };
+}
 
 // set the text of an element
 export function setText(ele, text) {
@@ -120,14 +129,42 @@ export function removeData(fName,defName) {
   };
 };
 
+// perform linear regression to compute the future value of something
+export function linreg(x, y, y_to_fit = 0) {
+  let small_num = 0.0000000001;
+  if (x.length > 1) {
+    // // Compute the sums of things
+    // const n = x.length; let sx = 0; let sxx = 0; let sxy = 0; let sy = 0;
+    // for (let i=0; i<n; i++) {
+    //   let xi = x[i]; let yi = y[i];
+    //   sx = sx + xi; sy = sy + yi;
+    //   sxx = sxx + xi*xi; sxy = sxy + xi*yi;
+    // };
+    // // Linear regression
+    // const m = (n*sxy - sx*sy) / (n*sxx - sx*sx); const c = (sy-m*sx) / n;
+    // // find the value of x for when y = y_to_fit
+    // return (y_to_fit - c) / m;
+    const m = (y[0] - y[y.length-1]) / (x[0] - x[x.length-1] + small_num) + small_num;
+    // y-y_1 = m(x-x_1)
+    return (y_to_fit - y[y.length-1]) / m + x[x.length-1];
+  } else { return 0; };
+};
+
+// Determine whether the user is currently experiencing DST
+export function DST(now) {
+  let jan = new Date(now.getFullYear(), 0, 1).getTimezoneOffset();
+  let jul = new Date(now.getFullYear(), 6, 1).getTimezoneOffset();
+  return Math.max(jan, jul) !== now.getTimezoneOffset();    
+};
+
 // fetch the date as a nicely formatted string
 export function dateString(now, format) {
   let datestring = format;
   // arrays of things
   const longMonth = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const shortMonth = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"," Aug", "Sept", "Oct", "Nov", "Dec"];
-  const longDay = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-  const shortDay = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
+  const longDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const shortDay = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
   // fetch used quantities
   const NDay = zeroPad(now.getDate());
   const SDay = shortDay[now.getDay()];
@@ -135,6 +172,7 @@ export function dateString(now, format) {
   const NMon = zeroPad(now.getMonth()+1);
   const SMon = shortMonth[now.getMonth()];
   const LMon = longMonth[now.getMonth()];
+  const year = now.getFullYear();
   // formatting
-  return datestring.replace("dayNum", NDay).replace("dayShort", SDay).replace("dayLong", LDay).replace("monthNum", NMon).replace("monthShort", SMon).replace("monthLong", LMon);
+  return datestring.replace("year", year).replace("dayNum", NDay).replace("dayShort", SDay).replace("dayLong", LDay).replace("monthNum", NMon).replace("monthShort", SMon).replace("monthLong", LMon);
 };
