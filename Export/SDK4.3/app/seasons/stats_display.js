@@ -26,17 +26,24 @@ export let statsDisaply = function(doc, settings) {
 
     // fetch module references
     let batInd = new batteryIndicator();
+    let batInd2 = new batteryIndicator();
     let dateInd = new dateIndicator(settings);
+    batInd2.discharge = true;
 
     // fetch the module from the settings codes
     let fetchModule = function(key) {
         switch (key) {
             case "batCharge":
                 return batInd;
+            case "batDisCharge":
+                return batInd2;
             case "curDate":
                 return dateInd;
         };
     };
+    
+    // force-update the module placement
+    this.onNewDay = function(now) { moduleplacer.placeModules(); };
 
     this.changeStats = function(statsList) {
         // fetch the number of stats to draw
@@ -74,4 +81,4 @@ export let statsDisaply = function(doc, settings) {
             };
         };
     };
-}
+};
