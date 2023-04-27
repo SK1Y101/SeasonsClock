@@ -11,8 +11,8 @@ export let dateIndicator = function(settings) {
     };
 
     this.getWidth = function() {
-        this.ontick(new Date());
-        return util.getWidth([this.text, this.icon]);
+        const format = settings.getOrElse("dateFormat", "dayNum/monthNum");
+        return util.dateStringLength(format);
     };
 
     // update onscreen elements

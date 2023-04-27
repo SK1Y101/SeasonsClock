@@ -75,12 +75,12 @@
   <!-- Moon object -->
   <svg id="moon" x="50%" y="50%">
     <g id="moonrot" transform="rotate(0)">
-      <gradientRect id="moonglow" x="-10%" y="-10%" width="20%" height="20%"
+      <gradientRect id="moonglow" x="-8%" y="-8%" width="16%" height="16%"
         gradient-type="radial"
         gradient-x1="50%" gradient-y1="50%"
         gradient-x2="100%" gradient-y2="100%"
-        gradient-color1="inherit"
-        gradient-color2="inherit"
+        gradient-color1="white"
+        gradient-color2="white"
         gradient-opacity2="0"/>
       <image href="icons/moon_phase/moon_shade_0.png" fill="slategray" x="-4%" y="-4%" width="8%" height="8%"/>
       <image href="icons/moon_phase/moon_face.png" fill="inherit" x="-4%" y="-4%" width="8%" height="8%"/>
@@ -89,7 +89,7 @@
   </svg>
 
   <!-- Ground object -->
-  <rect id="grass" x="0" y="65%" width="100%" height="30%" fill="#008013" />
+  <rect id="grass" x="0" y="65%" width="100%" height="50%" fill="#008013" />
 
   <!-- Clock object -->
   <text id="digitalClock">--:--</text>

@@ -176,3 +176,9 @@ export function dateString(now, format) {
   // formatting
   return datestring.replace("year", year).replace("dayNum", NDay).replace("dayShort", SDay).replace("dayLong", LDay).replace("monthNum", NMon).replace("monthShort", SMon).replace("monthLong", LMon);
 };
+
+// determine the maximum length of a date string
+export function dateStringLength(format) {
+  let maxString = format.replace("year", "0000").replace("dayNum", "00").replace("dayShort", "0000").replace("dayLong", "000000000").replace("monthNum", "00").replace("monthShort", "0000").replace("monthLong", "000000000");
+  return Math.min(3, maxString.length / 8);
+};

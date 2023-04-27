@@ -1,9 +1,9 @@
 //Import the inbuilt fitbit modules
-import { me } from "companion";
+import { me as companion } from "companion";
 import { peerSocket } from "messaging";
 import { settingsStorage } from "settings";
 
-//set the message format
+// set the message format
 let sendValue = function(key, val, type) {
   if (val) {
     sendData({
@@ -14,7 +14,7 @@ let sendValue = function(key, val, type) {
   };
 };
 
-//send the message if socket is open
+// send the message if socket is open
 function sendData(data) {
   if (peerSocket.readyState === peerSocket.OPEN) {
     peerSocket.send(data);
@@ -23,7 +23,7 @@ function sendData(data) {
   };
 };
 
-//Send settings if they have changed
+// Send settings if they have changed
 settingsStorage.addEventListener("change", evt => {
   if (evt.oldValue !== evt.newValue) {
     sendValue(evt.key, evt.newValue, "settings");
