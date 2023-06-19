@@ -9,7 +9,10 @@
     "appDisplayName": "Seasons",
     "iconFile": "resources/icon.png",
     "wipeColor": "#607d8b",
-    "requestedPermissions": [],
+    "requestedPermissions": [
+      "access_location",
+      "run_background"
+    ],
     "buildTargets": [
       "meson",
       "gemini",
@@ -24,5 +27,8 @@
   },
   "scripts": {
     "build": "fitbit-build"
+  },
+  "dependencies": {
+    "fitbit-asap": "^1.2.7"
   }
 }
