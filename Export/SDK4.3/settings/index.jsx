@@ -12,6 +12,8 @@ return (
                             {name: "Battery Charge",    value:"batCharge"},
                             {name: "Battery Remaining", value:"batDisCharge"},
                             {name: "Current Date",      value:"curDate"},
+                            {name: "Current Position",  value:"curPos"},
+                            {name: "Current Speed",     value:"curSpd"},
                         ]}
                     />
                 }

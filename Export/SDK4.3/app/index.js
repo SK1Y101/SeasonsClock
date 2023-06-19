@@ -2,11 +2,11 @@
 import clock from "clock";
 import document from "document";
 import { display } from "display";
+import asap from "fitbit-asap/app";
 import { peerSocket } from "messaging";
 import { preferences } from "user-settings";
 
 // My modules
-import * as util from "../common/utils";
 import { Settings } from "../common/settings";
 import { timeIndicator } from "./seasons/clock";
 import { statsDisaply } from "./seasons/stats_display";
@@ -53,6 +53,7 @@ clock.ontick = (evt) => {
   tickUpdate();
 };
 display.onchange = (evt) => {
+  statsDisp.ondisplay(display.on);
   if (display.on) {
     tickUpdate();
   };
@@ -67,21 +68,21 @@ let applySettings = function() {
     // Set Display modules
     settings.isPresent("shownStats", statsDisp.changeStats);
   } catch (err) {
-    console.log("Couldn't apply settings");
+    console.log("Couldn't apply settings: "+err);
   };
 }
 applySettings();
 
 //Fetch any messages that come through
-peerSocket.addEventListener("message", function(evt) {
-  if (!evt.data.hasOwnProperty("type")) {
-    console.log("Message without a type received: " + evt.data)
+asap.onmessage = message => {
+  if (!message.hasOwnProperty("type")) {
+    console.log("Message without a type received: " + message.type);
   };
-  if (evt.data.type === "settings") {
+  if (message.type === "settings") {
     let newSet = {};
-    newSet[evt.data.key] = evt.data.value;
+    newSet[message.key] = message.value;
 
-    console.log("Setting changed: "+evt.data.key+evt.data.value);
+    console.log("Setting changed: "+message.key+message.value);
 
     settings.replaceSettings(newSet);
 
@@ -89,4 +90,9 @@ peerSocket.addEventListener("message", function(evt) {
 
     applySettings();
   };
-});
+  if (message.type === "location") {
+    let position = message.value; let state = (message.key === "success");
+    background.onlocation(position, state);
+    statsDisp.onlocation(position, state);
+  };
+};

@@ -89,6 +89,13 @@ export function setText(ele, text) {
     ele.text = text;
   };
 };
+export function setSaledText(ele, text, width, maxfont = null) {
+  setText(ele, text);
+  let fontsize = maxfont ?? 30;
+  do {
+    ele.style.fontSize = fontsize--;
+  } while (ele.getBBox().width > width);
+};
 
 // Force a field to be an array
 export function forceArray(arr) {

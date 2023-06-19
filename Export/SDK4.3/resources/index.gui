@@ -25,7 +25,7 @@
         <use href="#star" x="  72%" y=" 405%" fill="rgb(165,185,255)"/>
         <use href="#star" x=" -88%" y=" 426%" fill="rgb(212,220,255)"/>
         <use href="#star" x=" -96%" y=" 373%" fill="rgb(156,178,255)"/>
-        <use href="#star" x="-145%" y=" 364%" fill="rgb(255,227,290)"/>
+        <use href="#star" x="-145%" y=" 364%" fill="rgb(255,227,190)"/>
         <use href="#star" x="-168%" y=" 303%" fill="rgb(241,241,255)"/>
         <!-- lynx -->
         <use href="#star" x="-469%" y="-567%" fill="rgb(255,208,142)"/>
@@ -104,4 +104,5 @@
   <image id="icon3" class="statsIcon" href=""/>
   <text id="stat4" class="stats"></text>
   <image id="icon4" class="statsIcon" href=""/>
+  <!-- <use id="stat1" class="stats" href="#marquee-text" mode="0"><set href="group/separator" attributeName="width" to="5%"/></use> -->
 </svg>

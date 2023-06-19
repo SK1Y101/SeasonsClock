@@ -6,6 +6,7 @@ import { dateIndicator } from "./date";
 import * as util from "../../common/utils";
 import { batteryIndicator } from "./battery";
 import { modulePlacer } from "./module_placer";
+import { positionIndicator } from "./position";
 
 export let statsDisaply = function(doc, settings) {
     // fetch elements
@@ -28,7 +29,10 @@ export let statsDisaply = function(doc, settings) {
     let batInd = new batteryIndicator();
     let batInd2 = new batteryIndicator();
     let dateInd = new dateIndicator(settings);
+    let posInd = new positionIndicator();
+    let spdInd = new positionIndicator();
     batInd2.discharge = true;
+    spdInd.velocity = true;
 
     // fetch the module from the settings codes
     let fetchModule = function(key) {
@@ -39,6 +43,10 @@ export let statsDisaply = function(doc, settings) {
                 return batInd2;
             case "curDate":
                 return dateInd;
+            case "curPos":
+                return posInd;
+            case "curSpd":
+                return spdInd;
         };
     };
     
@@ -77,7 +85,24 @@ export let statsDisaply = function(doc, settings) {
     this.ontick = function(now) {
         for (let ele of elem) {
             if (ele["modulename"] && ele["module"].ontick) {
-                ele["module"].ontick(now)
+                ele["module"].ontick(now);
+            };
+        };
+    };
+
+    this.onlocation = function(position, state = null) {
+        for (let ele of elem) {
+            if (ele["modulename"] && ele["module"].onlocation) {
+                ele["module"].onlocation(position, state);
+            };
+        };
+    };
+
+    this.ondisplay = function(state = false) {
+        // true if the display is on, false if off
+        for (let ele of elem) {
+            if (ele["modulename"] && ele["module"].ondisplay) {
+                ele["module"].ondisplay(state);
             };
         };
     };

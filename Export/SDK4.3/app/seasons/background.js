@@ -48,12 +48,12 @@ let skyObject = function(doc, name, skycolour, horizoncolour, colouralt) {
         let col = lerpHex(this.horizonColour, this.skyColour, colour_y);
         util.updateColour(this.obj, col);
         this.glow.gradient.colors.c1 = col;
-        this.glow.style.opacity = (sun_y == null ? 1 : Math.max(0, (-90/9)*sun_y));
+        this.glow.style.opacity = (sun_y == null ? 1 : Math.min(1, Math.max(0, (-90/9)*sun_y)));
     };
     // update phases if given
     this.updatePhase = function(phase, frac) {
         this.shadow.href = "icons/moon_phase/moon_shade_"+Math.round(phase*56)%56+".png";
-        this.rot.groupTransform.rotate.angle = 360*frac;
+        this.rot.groupTransform.rotate.angle = 360*(0.5+frac);
     };
     this.updatePos = function(x, y, sun_y=null) {
         this.obj.x = w*x;
@@ -88,8 +88,7 @@ export let Background = function(doc) {
     const nightStar = 0.8;
 
     // user position
-    this.latitude = 51.5;
-    this.longitude = -0.6
+    this.latitude = util.loadData("latitude", 51.5);
 
     // function lerpn(a,t=0) {
     //     let n = a.length; let t1 = n*t; let i = Math.floor(t1); let d = t1-i;
@@ -146,5 +145,13 @@ export let Background = function(doc) {
         // rotate the starfield and moon
         starRot.groupTransform.rotate.angle = 360*(dayfrac + astrofrac);
         moonObj.updatePhase(lunar_phase, moonx);
+    };
+
+    // on location reading
+    this.onlocation = function(position, state) {
+        if (state) {
+            this.latitude = position.latitude;
+            util.saveData("latitude", position.latitude);
+        };
     };
 };
